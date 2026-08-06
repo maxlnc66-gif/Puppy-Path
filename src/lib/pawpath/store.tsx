@@ -440,17 +440,22 @@ export function PawPathProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const claimFreeAdoption = useCallback((petId: string) => {
-    const today = new Date().toISOString().slice(0, 10);
+    const MS_PER_DAY = 1000 * 60 * 60 * 24;
+    const today = new Date();
     let ok = false;
     setState((s) => {
-      if (s.lastFreeAdoptionDate === today) return s;
+      const last = s.lastFreeAdoptionDate ? new Date(s.lastFreeAdoptionDate) : null;
+      if (last) {
+        const days = Math.floor((today.getTime() - last.getTime()) / MS_PER_DAY);
+        if (days < 3) return s; // must wait 3 full days
+      }
       const pet = s.rescuePets.find((p) => p.id === petId);
       if (!pet) return s;
       ok = true;
       const nextPets = s.rescuePets.map((entry) => (entry.id === petId ? { ...entry, adopted: true, adoptable: false } : entry));
       return {
         ...s,
-        lastFreeAdoptionDate: today,
+        lastFreeAdoptionDate: today.toISOString().slice(0, 10),
         rescuePets: nextPets,
         adoptedPetIds: [...s.adoptedPetIds, petId],
         homePetIds: s.homePetIds.includes(petId) ? s.homePetIds : [...s.homePetIds, petId],

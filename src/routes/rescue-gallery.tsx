@@ -235,7 +235,11 @@ function RescueGalleryPage() {
             (() => {
               const pet = state.rescuePets.find((p) => p.id === selected)!;
               const affordable = state.coins >= ADOPTION_COST;
-              const freeAvailable = state.lastFreeAdoptionDate !== new Date().toISOString().slice(0, 10);
+              // compute free availability: allowed if lastFreeAdoptionDate is null or >= 3 days ago
+              const MS_PER_DAY = 1000 * 60 * 60 * 24;
+              const today = new Date();
+              const last = state.lastFreeAdoptionDate ? new Date(state.lastFreeAdoptionDate) : null;
+              const freeAvailable = !last || Math.floor((today.getTime() - last.getTime()) / MS_PER_DAY) >= 3;
               return (
                 <div className="col-span-full fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
                   <div className="w-full max-w-md rounded-2xl bg-card p-6">
@@ -252,9 +256,10 @@ function RescueGalleryPage() {
                       </button>
                       <button
                         onClick={() => handleFreeAdopt(pet.id)}
-                        className="btn-pop rounded-2xl bg-mint px-4 py-2 text-sm text-mint-foreground"
+                        disabled={!freeAvailable}
+                        className={`btn-pop rounded-2xl px-4 py-2 text-sm ${freeAvailable ? "bg-mint text-mint-foreground" : "bg-card text-muted-foreground"}`}
                       >
-                        Use free daily adoption
+                        {freeAvailable ? "Use free adoption (every 3 days)" : "Free adoption not available yet"}
                       </button>
                       <button onClick={closeAdoptModal} className="btn-pop rounded-2xl bg-secondary px-4 py-2 text-sm text-secondary-foreground">
                         Cancel
