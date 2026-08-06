@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { PUPPIES, STARTER_DOGS, type Grade } from "@/lib/pawpath/data";
+import { PUPPIES, RESCUE_CATS, RESCUE_DOGS, STARTER_DOGS, type Grade } from "@/lib/pawpath/data";
 import { usePawPath } from "@/lib/pawpath/store";
 import { PuppyImage } from "@/components/pawpath/PuppyImage";
 
@@ -150,6 +150,52 @@ function StartPage() {
               ))}
             </div>
           </div>
+
+          <section className="rounded-3xl border border-border bg-card/80 p-4">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h2 className="text-2xl font-display font-extrabold">Rescue Gallery</h2>
+                <p className="text-sm text-muted-foreground">Meet 80 dogs and 80 cats ready for a home.</p>
+              </div>
+              <span className="rounded-full bg-secondary px-3 py-1 text-sm font-extrabold text-secondary-foreground">
+                160 pets
+              </span>
+            </div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {RESCUE_DOGS.slice(0, 4).map((pet) => (
+                <div key={pet.id} className="rounded-3xl border border-border bg-secondary/80 p-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">🐶</span>
+                    <div>
+                      <p className="font-display text-base font-extrabold">{pet.name}</p>
+                      <p className="text-sm text-muted-foreground">{pet.breed}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {RESCUE_CATS.slice(0, 4).map((pet) => (
+                <div key={pet.id} className="rounded-3xl border border-border bg-secondary/80 p-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">🐱</span>
+                    <div>
+                      <p className="font-display text-base font-extrabold">{pet.name}</p>
+                      <p className="text-sm text-muted-foreground">{pet.breed}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-3xl bg-primary/10 p-4">
+              <p className="text-sm text-muted-foreground">There are 160 rescue pets in the full gallery. Tap below to see them all.</p>
+              <button
+                type="button"
+                onClick={() => navigate({ to: "/rescue-gallery" })}
+                className="btn-pop bg-primary px-5 py-3 text-sm text-primary-foreground"
+              >
+                View full rescue gallery
+              </button>
+            </div>          </section>
 
           {error ? <p className="text-base font-bold text-destructive">{error}</p> : null}
 

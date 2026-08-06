@@ -14,6 +14,7 @@ import { Route as HomeRouteImport } from './routes/home'
 import { Route as ParentRouteImport } from './routes/parent'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SkillsRouteImport } from './routes/skills'
+import { Route as RescueGalleryRouteImport } from './routes/rescue-gallery'
 import { Route as MissionAdventureIdRouteImport } from './routes/mission.$adventureId'
 import { Route as PracticeSkillIdRouteImport } from './routes/practice.$skillId'
 
@@ -42,6 +43,11 @@ const SkillsRoute = SkillsRouteImport.update({
   path: '/skills',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RescueGalleryRoute = RescueGalleryRouteImport.update({
+  id: '/rescue-gallery',
+  path: '/rescue-gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MissionAdventureIdRoute = MissionAdventureIdRouteImport.update({
   id: '/mission/$adventureId',
   path: '/mission/$adventureId',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/parent': typeof ParentRoute
   '/shop': typeof ShopRoute
   '/skills': typeof SkillsRoute
+  '/rescue-gallery': typeof RescueGalleryRoute
   '/mission/$adventureId': typeof MissionAdventureIdRoute
   '/practice/$skillId': typeof PracticeSkillIdRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/parent': typeof ParentRoute
   '/shop': typeof ShopRoute
   '/skills': typeof SkillsRoute
+  '/rescue-gallery': typeof RescueGalleryRoute
   '/mission/$adventureId': typeof MissionAdventureIdRoute
   '/practice/$skillId': typeof PracticeSkillIdRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/parent': typeof ParentRoute
   '/shop': typeof ShopRoute
   '/skills': typeof SkillsRoute
+  '/rescue-gallery': typeof RescueGalleryRoute
   '/mission/$adventureId': typeof MissionAdventureIdRoute
   '/practice/$skillId': typeof PracticeSkillIdRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/parent'
     | '/shop'
     | '/skills'
+    | '/rescue-gallery'
     | '/mission/$adventureId'
     | '/practice/$skillId'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/parent'
     | '/shop'
     | '/skills'
+    | '/rescue-gallery'
     | '/mission/$adventureId'
     | '/practice/$skillId'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/parent'
     | '/shop'
     | '/skills'
+    | '/rescue-gallery'
     | '/mission/$adventureId'
     | '/practice/$skillId'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   ParentRoute: typeof ParentRoute
   ShopRoute: typeof ShopRoute
   SkillsRoute: typeof SkillsRoute
+  RescueGalleryRoute: typeof RescueGalleryRoute
   MissionAdventureIdRoute: typeof MissionAdventureIdRoute
   PracticeSkillIdRoute: typeof PracticeSkillIdRoute
 }
@@ -158,6 +171,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SkillsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rescue-gallery': {
+      id: '/rescue-gallery'
+      path: '/rescue-gallery'
+      fullPath: '/rescue-gallery'
+      preLoaderRoute: typeof RescueGalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rescue-gallery': {
+      id: '/rescue-gallery'
+      path: '/rescue-gallery'
+      fullPath: '/rescue-gallery'
+      preLoaderRoute: typeof RescueGalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mission/$adventureId': {
       id: '/mission/$adventureId'
       path: '/mission/$adventureId'
@@ -181,6 +208,7 @@ const rootRouteChildren: RootRouteChildren = {
   ParentRoute: ParentRoute,
   ShopRoute: ShopRoute,
   SkillsRoute: SkillsRoute,
+  RescueGalleryRoute: RescueGalleryRoute,
   MissionAdventureIdRoute: MissionAdventureIdRoute,
   PracticeSkillIdRoute: PracticeSkillIdRoute,
 }

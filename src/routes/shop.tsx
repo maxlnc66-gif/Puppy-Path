@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { SHOP_ITEMS, type ShopItem } from "@/lib/pawpath/data";
+import { SHOP_ITEMS, TOOL_CATEGORIES, type ShopItem } from "@/lib/pawpath/data";
 import { levelInfo, usePawPath } from "@/lib/pawpath/store";
 import { AppHeader, BottomNav } from "@/components/pawpath/AppShell";
 import { PuppyImage } from "@/components/pawpath/PuppyImage";
@@ -24,15 +24,6 @@ export const Route = createFileRoute("/shop")({
   }),
   component: ShopPage,
 });
-
-const GROUPS = [
-  "Puppy Food",
-  "Toys",
-  "Clothes",
-  "Puppy Room",
-  "New Places",
-  "Puppy Skills",
-] as const;
 
 function ShopPage() {
   const { state, buy } = usePawPath();
@@ -98,20 +89,30 @@ function ShopPage() {
           </p>
         ) : null}
 
-        {GROUPS.map((group) => (
-          <section key={group} className="mt-6">
-            <h2 className="text-2xl">{group}</h2>
-            <div className="mt-3 grid gap-3 sm:grid-cols-3">
-              {SHOP_ITEMS.filter((i) => i.group === group).map((item) => {
+        {TOOL_CATEGORIES.map((category) => (
+          <section key={category.id} className="mt-6">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h2 className="text-2xl">
+                  {category.emoji} {category.name}
+                </h2>
+                <p className="text-sm text-muted-foreground">{category.description}</p>
+              </div>
+              <span className="rounded-full bg-secondary px-3 py-1 text-sm font-extrabold text-secondary-foreground">
+                {category.variants.length} tools
+              </span>
+            </div>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {category.variants.map((item) => {
                 const has = state.owned.includes(item.id);
                 return (
                   <div key={item.id} className="card-soft flex items-center gap-3 p-3">
-                        <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-secondary">
-                          <span className={`tool-icon icon-${item.id}`} aria-hidden>
-                            {item.emoji}
-                          </span>
-                          <span className="sr-only">{item.emoji}</span>
-                        </span>
+                    <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-secondary">
+                      <span className={`tool-icon icon-${item.id}`} aria-hidden>
+                        {item.emoji}
+                      </span>
+                      <span className="sr-only">{item.emoji}</span>
+                    </span>
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-display text-lg font-extrabold">{item.name}</p>
                       <p className="text-sm text-muted-foreground">🪙 {item.cost} coins</p>

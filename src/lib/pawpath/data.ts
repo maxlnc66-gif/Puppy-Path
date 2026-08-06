@@ -1330,6 +1330,144 @@ export interface PuppyBreed {
   emoji: string;
 }
 
+const DOG_BREEDS = [
+  "Golden Retriever",
+  "Labrador Retriever",
+  "Beagle",
+  "Bulldog",
+  "Poodle",
+  "Shiba Inu",
+  "Corgi",
+  "Husky",
+  "Dachshund",
+  "Boxer",
+  "German Shepherd",
+  "Border Collie",
+  "Australian Shepherd",
+  "Maltese",
+  "Pomeranian",
+  "Chihuahua",
+  "Great Dane",
+  "French Bulldog",
+  "Boston Terrier",
+  "Cavalier King Charles Spaniel",
+];
+
+const CAT_BREEDS = [
+  "Siamese",
+  "Persian",
+  "Maine Coon",
+  "Ragdoll",
+  "Bengal",
+  "Sphynx",
+  "British Shorthair",
+  "Scottish Fold",
+  "Russian Blue",
+  "Abyssinian",
+  "American Shorthair",
+  "Birman",
+  "Norwegian Forest Cat",
+  "Himalayan",
+  "Devon Rex",
+  "Oriental Shorthair",
+  "Savannah",
+  "Turkish Van",
+  "Egyptian Mau",
+  "Chartreux",
+];
+
+const DOG_NAMES = [
+  "Buddy",
+  "Charlie",
+  "Max",
+  "Bailey",
+  "Cooper",
+  "Daisy",
+  "Luna",
+  "Bella",
+  "Rocky",
+  "Milo",
+  "Leo",
+  "Sadie",
+  "Ruby",
+  "Maggie",
+  "Zoey",
+  "Winston",
+  "Scout",
+  "Marley",
+  "Penny",
+  "Teddy",
+];
+
+const CAT_NAMES = [
+  "Luna",
+  "Oliver",
+  "Milo",
+  "Leo",
+  "Chloe",
+  "Simba",
+  "Nala",
+  "Lily",
+  "Mittens",
+  "Shadow",
+  "Cleo",
+  "Oreo",
+  "Whiskers",
+  "Sophie",
+  "Penny",
+  "Mittens",
+  "Jasper",
+  "Pumpkin",
+  "Willow",
+  "Milo",
+];
+
+const MOODS: RescuePet["mood"][] = ["Sad", "Nervous", "Calm", "Happy", "Very Happy"];
+const LOCATIONS = [
+  "Main House Area",
+  "Play Area",
+  "Sleeping Area",
+  "Food Area",
+  "Medical Care Area",
+  "Garden",
+  "Warm Window Spot",
+  "Training Area",
+  "Rescue Yard",
+  "Cozy Corner",
+];
+
+function makeRescuePets(type: "dog" | "cat", count: number): RescuePet[] {
+  const names = type === "dog" ? DOG_NAMES : CAT_NAMES;
+  const breeds = type === "dog" ? DOG_BREEDS : CAT_BREEDS;
+  const favoriteFoods = type === "dog" ? ["Chicken bites", "Beef jerky", "Salmon flakes", "Peanut butter", "Turkey treats"] : ["Tuna bits", "Chicken flakes", "Salmon flakes", "Cheesy bites", "Catnip snacks"];
+  const favoriteToys = type === "dog" ? ["Ball", "Rope toy", "Frisbee", "Squeaky toy", "Plush bone"] : ["Plush mouse", "Bell toy", "Tunnel toy", "Feather wand", "Crinkle ball"];
+  const favoriteItems = type === "dog" ? ["Soft bed", "Blanket", "Hammock", "Pillow", "Cozy mat"] : ["Cat bed", "Cat cave", "Soft basket", "Blanket", "Sun window seat"];
+
+  return Array.from({ length: count }, (_, index) => {
+    const id = `${type}-${index + 1}`;
+    const nameIndex = index % names.length;
+    const breedIndex = index % breeds.length;
+    const moodIndex = index % MOODS.length;
+    const locationIndex = index % LOCATIONS.length;
+    const suffix = Math.floor(index / names.length) + 1;
+    return {
+      id,
+      name: `${names[nameIndex]} ${suffix}`,
+      type,
+      breed: breeds[breedIndex],
+      age: 1 + ((index % 5) + 1),
+      story: `${names[nameIndex]} was rescued and is ready to find a loving home.`,
+      personality: `${type === "dog" ? "Playful" : "Curious"} and kind`,
+      favoriteFood: favoriteFoods[index % favoriteFoods.length],
+      favoriteToy: favoriteToys[index % favoriteToys.length],
+      favoriteItem: favoriteItems[index % favoriteItems.length],
+      mood: MOODS[moodIndex],
+      location: LOCATIONS[locationIndex],
+      adopted: false,
+    };
+  });
+}
+
 export const PUPPIES: PuppyBreed[] = [
   { id: "sunny", name: "Golden Pup", emoji: "🐶" },
   { id: "frost", name: "Snow Pup", emoji: "🐺" },
@@ -1339,116 +1477,9 @@ export const PUPPIES: PuppyBreed[] = [
   { id: "luna", name: "Luna", emoji: "🐱" },
 ];
 
-export const STARTER_DOGS: RescuePet[] = [
-  {
-    id: "corgi",
-    name: "Coco",
-    type: "dog",
-    breed: "Corgi",
-    age: 2,
-    story: "Coco was found near a park and now waits for a safe home.",
-    personality: "Kind and curious",
-    favoriteFood: "Chicken bites",
-    favoriteToy: "Rope toy",
-    favoriteItem: "Soft dog bed",
-    mood: "Nervous",
-    location: "Main House Area",
-    adopted: false,
-  },
-  {
-    id: "shiba",
-    name: "Mochi",
-    type: "dog",
-    breed: "Shiba Inu",
-    age: 3,
-    story: "Mochi was rescued after getting lost on a rainy day.",
-    personality: "Brave and playful",
-    favoriteFood: "Rice treats",
-    favoriteToy: "Ball",
-    favoriteItem: "Blanket",
-    mood: "Calm",
-    location: "Play Area",
-    adopted: false,
-  },
-  {
-    id: "labrador",
-    name: "Poppy",
-    type: "dog",
-    breed: "Labrador",
-    age: 4,
-    story: "Poppy was rescued from a busy road and now loves gentle care.",
-    personality: "Friendly and cheerful",
-    favoriteFood: "Salmon bites",
-    favoriteToy: "Frisbee",
-    favoriteItem: "Hammock",
-    mood: "Happy",
-    location: "Food Area",
-    adopted: false,
-  },
-  {
-    id: "beagle",
-    name: "Teddy",
-    type: "dog",
-    breed: "Beagle",
-    age: 3,
-    story: "Teddy was found near a garden and now loves calm walks.",
-    personality: "Gentle and friendly",
-    favoriteFood: "Apple slices",
-    favoriteToy: "Squeaky toy",
-    favoriteItem: "Pillow",
-    mood: "Happy",
-    location: "Sleeping Area",
-    adopted: false,
-  },
-];
-
-export const RESCUE_CATS: RescuePet[] = [
-  {
-    id: "orange-cat",
-    name: "Sunny",
-    type: "cat",
-    breed: "Orange Cat",
-    age: 2,
-    story: "Sunny was found beside a garden and now loves warm windows.",
-    personality: "Gentle and sunny",
-    favoriteFood: "Tuna bits",
-    favoriteToy: "Plush mouse",
-    favoriteItem: "Cat bed",
-    mood: "Calm",
-    location: "Sleeping Area",
-    adopted: false,
-  },
-  {
-    id: "siamese",
-    name: "Mina",
-    type: "cat",
-    breed: "Siamese",
-    age: 3,
-    story: "Mina was rescued from a cold shelter and now loves soft blankets.",
-    personality: "Curious and calm",
-    favoriteFood: "Chicken flakes",
-    favoriteToy: "Bell toy",
-    favoriteItem: "Cat cave",
-    mood: "Happy",
-    location: "Medical Care Area",
-    adopted: false,
-  },
-  {
-    id: "ragdoll",
-    name: "Lulu",
-    type: "cat",
-    breed: "Ragdoll",
-    age: 4,
-    story: "Lulu was rescued from a busy street and now loves soft baskets.",
-    personality: "Calm and sweet",
-    favoriteFood: "Salmon flakes",
-    favoriteToy: "Tunnel toy",
-    favoriteItem: "Soft basket",
-    mood: "Nervous",
-    location: "Play Area",
-    adopted: false,
-  },
-];
+export const RESCUE_DOGS: RescuePet[] = makeRescuePets("dog", 80);
+export const STARTER_DOGS: RescuePet[] = RESCUE_DOGS.slice(0, 4);
+export const RESCUE_CATS: RescuePet[] = makeRescuePets("cat", 80);
 
 export const LEVELS = [
   { name: "New Puppy", need: 0, emoji: "🍼" },
@@ -1463,13 +1494,285 @@ export interface ShopItem {
   name: string;
   emoji: string;
   cost: number;
-  group: "Puppy Food" | "Toys" | "Clothes" | "Puppy Room" | "New Places" | "Puppy Skills" | "Rescue Hotel" | "Limited Events" | "Check-In";
+  group: string;
   category?: "comfort" | "play" | "care" | "decor" | "check-in" | "event";
   limitedForDays?: number;
   eventName?: string;
 }
 
-export const SHOP_ITEMS: ShopItem[] = [
+export interface ToolCategory {
+  id: string;
+  name: string;
+  emoji: string;
+  description: string;
+  variants: ShopItem[];
+}
+
+export const TOOL_CATEGORIES: ToolCategory[] = [
+  {
+    id: "dog-mats",
+    name: "Dog Mats",
+    emoji: "🛋️",
+    description: "Soft mats to make every pup comfy.",
+    variants: [
+      { id: "dog-mat-cooling", name: "Cooling Mat", emoji: "🧊", cost: 18, group: "Dog Mats" },
+      { id: "dog-mat-toast", name: "Toast Mat", emoji: "🍞", cost: 20, group: "Dog Mats" },
+      { id: "dog-mat-hot-dog", name: "Hot Dog Mat", emoji: "🌭", cost: 22, group: "Dog Mats" },
+      { id: "dog-mat-carrot", name: "Carrot Mat", emoji: "🥕", cost: 20, group: "Dog Mats" },
+      { id: "dog-mat-bear", name: "Bear Mat", emoji: "🐻", cost: 24, group: "Dog Mats" },
+    ],
+  },
+  {
+    id: "bushes-plants",
+    name: "Bushes and Plants",
+    emoji: "🌿",
+    description: "Grow greenery and cozy corners for your pets.",
+    variants: [
+      { id: "plant-dry-leaf", name: "Dry Leaf Bush", emoji: "🍂", cost: 16, group: "Bushes and Plants" },
+      { id: "plant-wildflower", name: "Wildflower Bush", emoji: "🌼", cost: 18, group: "Bushes and Plants" },
+      { id: "plant-rose", name: "Rose Bush", emoji: "🌹", cost: 20, group: "Bushes and Plants" },
+      { id: "plant-wheat", name: "Wheat Bush", emoji: "🌾", cost: 18, group: "Bushes and Plants" },
+      { id: "plant-clover", name: "Lucky Clover Bush", emoji: "☘️", cost: 22, group: "Bushes and Plants" },
+    ],
+  },
+  {
+    id: "cat-mats",
+    name: "Cat Mats",
+    emoji: "🧶",
+    description: "Purr-fect resting mats for cat friends.",
+    variants: [
+      { id: "cat-mat-basic", name: "Basic Cat Mat", emoji: "🟤", cost: 15, group: "Cat Mats" },
+      { id: "cat-mat-paw", name: "Cat Paw Mat", emoji: "🐾", cost: 18, group: "Cat Mats" },
+      { id: "cat-mat-egg", name: "Fried Egg Mat", emoji: "🍳", cost: 20, group: "Cat Mats" },
+      { id: "cat-mat-avocado", name: "Avocado Mat", emoji: "🥑", cost: 21, group: "Cat Mats" },
+      { id: "cat-mat-goldfish", name: "Goldfish Mat", emoji: "🐟", cost: 22, group: "Cat Mats" },
+    ],
+  },
+  {
+    id: "rope-toys",
+    name: "Rope Toys",
+    emoji: "🪢",
+    description: "Tug, chase, and chew on playful rope toys.",
+    variants: [
+      { id: "rope-toy-basic", name: "Basic Rope Toy", emoji: "🧩", cost: 14, group: "Rope Toys" },
+      { id: "rope-toy-football", name: "Football Rope Toy", emoji: "🏈", cost: 18, group: "Rope Toys" },
+      { id: "rope-toy-carrot", name: "Carrot Rope Toy", emoji: "🥕", cost: 16, group: "Rope Toys" },
+      { id: "rope-toy-pineapple", name: "Pineapple Rope Toy", emoji: "🍍", cost: 18, group: "Rope Toys" },
+      { id: "rope-toy-octopus", name: "Octopus Rope Toy", emoji: "🐙", cost: 20, group: "Rope Toys" },
+    ],
+  },
+  {
+    id: "teaser-wands",
+    name: "Cat Teaser Wands",
+    emoji: "🎣",
+    description: "Wands for chasing, pouncing and pretending.",
+    variants: [
+      { id: "wand-fish", name: "Fish Teaser Wand", emoji: "🐟", cost: 16, group: "Cat Teaser Wands" },
+      { id: "wand-mouse", name: "Mouse Teaser Wand", emoji: "🐭", cost: 17, group: "Cat Teaser Wands" },
+      { id: "wand-butterfly", name: "Butterfly Teaser Wand", emoji: "🦋", cost: 18, group: "Cat Teaser Wands" },
+      { id: "wand-white-dove", name: "White Dove Teaser Wand", emoji: "🕊️", cost: 19, group: "Cat Teaser Wands" },
+      { id: "wand-airplane", name: "Airplane Teaser Wand", emoji: "✈️", cost: 20, group: "Cat Teaser Wands" },
+    ],
+  },
+  {
+    id: "balls",
+    name: "Balls",
+    emoji: "⚽",
+    description: "Round toys for fetch, roll, and fun.",
+    variants: [
+      { id: "ball-baseball", name: "Baseball", emoji: "⚾", cost: 13, group: "Balls" },
+      { id: "ball-plush", name: "Plush Ball", emoji: "🟣", cost: 15, group: "Balls" },
+      { id: "ball-watermelon", name: "Mini Watermelon Ball", emoji: "🍉", cost: 16, group: "Balls" },
+      { id: "ball-toilet-paper", name: "Toilet Paper Roll Ball", emoji: "🧻", cost: 17, group: "Balls" },
+      { id: "ball-tennis", name: "Tennis Ball", emoji: "🎾", cost: 18, group: "Balls" },
+    ],
+  },
+  {
+    id: "plastic-toys",
+    name: "Plastic Toys",
+    emoji: "🧸",
+    description: "Bright plastic toys for playful paws.",
+    variants: [
+      { id: "plastic-toy-disc", name: "Flying Disc Toy", emoji: "🟦", cost: 14, group: "Plastic Toys" },
+      { id: "plastic-toy-slipper", name: "Slipper Toy", emoji: "👡", cost: 15, group: "Plastic Toys" },
+      { id: "plastic-toy-bone", name: "Bone Toy", emoji: "🦴", cost: 16, group: "Plastic Toys" },
+      { id: "plastic-toy-chicken", name: "Screaming Chicken Toy", emoji: "🐔", cost: 17, group: "Plastic Toys" },
+      { id: "plastic-toy-duck", name: "Yellow Duck Toy", emoji: "🦆", cost: 16, group: "Plastic Toys" },
+    ],
+  },
+  {
+    id: "plush-toys",
+    name: "Plush Toys",
+    emoji: "🐰",
+    description: "Soft friends for cuddles and comfort.",
+    variants: [
+      { id: "plush-pillow", name: "Plush Pillow", emoji: "🛏️", cost: 18, group: "Plush Toys" },
+      { id: "plush-bunny", name: "Bunny Plush Toy", emoji: "🐇", cost: 20, group: "Plush Toys" },
+      { id: "plush-bear", name: "Bear Plush Toy", emoji: "🐻", cost: 20, group: "Plush Toys" },
+      { id: "plush-chicken-leg", name: "Chicken Leg Plush Toy", emoji: "🍗", cost: 19, group: "Plush Toys" },
+      { id: "plush-pig", name: "Pig Plush Toy", emoji: "🐷", cost: 19, group: "Plush Toys" },
+    ],
+  },
+  {
+    id: "boxes-bags",
+    name: "Boxes and Bags",
+    emoji: "📦",
+    description: "Storage boxes and snack-style bags for play.",
+    variants: [
+      { id: "box-delivery", name: "Delivery Box", emoji: "📦", cost: 12, group: "Boxes and Bags" },
+      { id: "box-fast-food", name: "Fast-Food Paper Bag", emoji: "🍟", cost: 14, group: "Boxes and Bags" },
+      { id: "box-takeout", name: "Takeout Box", emoji: "🍱", cost: 14, group: "Boxes and Bags" },
+      { id: "box-apple", name: "Apple Box", emoji: "🍎", cost: 15, group: "Boxes and Bags" },
+      { id: "box-strawberry", name: "Strawberry Paper Bag", emoji: "🍓", cost: 16, group: "Boxes and Bags" },
+    ],
+  },
+  {
+    id: "scratching-boards",
+    name: "Scratching Boards",
+    emoji: "🪵",
+    description: "Scratch, climb, and nap on cozy boards.",
+    variants: [
+      { id: "scratch-basic", name: "Basic Scratching Board", emoji: "🪓", cost: 18, group: "Scratching Boards" },
+      { id: "scratch-log", name: "Wooden Log Scratching Board", emoji: "🪵", cost: 20, group: "Scratching Boards" },
+      { id: "scratch-cat-shaped", name: "Cat-Shaped Scratching Board", emoji: "🐱", cost: 22, group: "Scratching Boards" },
+      { id: "scratch-carrot", name: "Carrot Scratching Board", emoji: "🥕", cost: 20, group: "Scratching Boards" },
+      { id: "scratch-cactus", name: "Cactus Scratching Board", emoji: "🌵", cost: 21, group: "Scratching Boards" },
+    ],
+  },
+  {
+    id: "cat-beds",
+    name: "Cat Beds",
+    emoji: "🛏️",
+    description: "Sleepy beds shaped like food, tents, and nests.",
+    variants: [
+      { id: "cat-bed-bamboo", name: "Bamboo and Rattan Cat Bed", emoji: "🪵", cost: 22, group: "Cat Beds" },
+      { id: "cat-bed-hamburger", name: "Hamburger Cat Bed", emoji: "🍔", cost: 24, group: "Cat Beds" },
+      { id: "cat-bed-tent", name: "Tent Cat Bed", emoji: "⛺", cost: 25, group: "Cat Beds" },
+      { id: "cat-bed-pumpkin", name: "Pumpkin Cat Bed", emoji: "🎃", cost: 26, group: "Cat Beds" },
+      { id: "cat-bed-hen", name: "Hen Cat Bed", emoji: "🐔", cost: 26, group: "Cat Beds" },
+    ],
+  },
+  {
+    id: "cat-trees",
+    name: "Cat Trees",
+    emoji: "🌳",
+    description: "Tall trees for climbing, scratching, and sleeping.",
+    variants: [
+      { id: "cat-tree-basic", name: "Basic Cat Tree", emoji: "🌿", cost: 24, group: "Cat Trees" },
+      { id: "cat-tree-flower", name: "Flower Cat Tree", emoji: "🌸", cost: 26, group: "Cat Trees" },
+      { id: "cat-tree-dessert", name: "Dessert Cat Tree", emoji: "🍰", cost: 28, group: "Cat Trees" },
+      { id: "cat-tree-strawberry", name: "Strawberry Cat Tree", emoji: "🍓", cost: 28, group: "Cat Trees" },
+      { id: "cat-tree-star", name: "Star Cat Tree", emoji: "⭐", cost: 30, group: "Cat Trees" },
+    ],
+  },
+  {
+    id: "pet-houses",
+    name: "Pet Houses",
+    emoji: "🏠",
+    description: "Cozy homes for puppies and kittens alike.",
+    variants: [
+      { id: "pet-house-basic", name: "Basic House", emoji: "🏡", cost: 30, group: "Pet Houses" },
+      { id: "pet-house-dessert", name: "Dessert House", emoji: "🍦", cost: 32, group: "Pet Houses" },
+      { id: "pet-house-camper", name: "Camper House", emoji: "🚐", cost: 34, group: "Pet Houses" },
+      { id: "pet-house-beach", name: "Beach Villa", emoji: "🏖️", cost: 36, group: "Pet Houses" },
+      { id: "pet-house-milk", name: "Milk Carton House", emoji: "🥛", cost: 35, group: "Pet Houses" },
+    ],
+  },
+  {
+    id: "bath-items",
+    name: "Bath Items",
+    emoji: "🛁",
+    description: "Splashy tubs and pools for bubbly fun.",
+    variants: [
+      { id: "bath-small-pool", name: "Small Pool", emoji: "🏊", cost: 20, group: "Bath Items" },
+      { id: "bath-hot-spring", name: "Wooden Hot Spring Tub", emoji: "🪵", cost: 24, group: "Bath Items" },
+      { id: "bath-bathtub", name: "Bathtub", emoji: "🛁", cost: 22, group: "Bath Items" },
+      { id: "bath-coffee-cup", name: "Large Coffee Cup Bath", emoji: "☕", cost: 26, group: "Bath Items" },
+      { id: "bath-drink-cup", name: "Cold Drink Cup Bath", emoji: "🥤", cost: 26, group: "Bath Items" },
+    ],
+  },
+  {
+    id: "jars",
+    name: "Jars",
+    emoji: "🧴",
+    description: "Fun jars filled with treats and cozy charms.",
+    variants: [
+      { id: "jar-ice-cream", name: "Ice Cream Jar", emoji: "🍨", cost: 16, group: "Jars" },
+      { id: "jar-salmon", name: "Salmon Jar", emoji: "🐟", cost: 17, group: "Jars" },
+      { id: "jar-chili", name: "Chili Sauce Jar", emoji: "🌶️", cost: 17, group: "Jars" },
+      { id: "jar-honey", name: "Honey Jar", emoji: "🍯", cost: 18, group: "Jars" },
+      { id: "jar-watermelon", name: "Watermelon Jar", emoji: "🍉", cost: 18, group: "Jars" },
+    ],
+  },
+  {
+    id: "hammocks",
+    name: "Hammocks",
+    emoji: "🛌",
+    description: "Relaxing hammocks for naps and lazy afternoons.",
+    variants: [
+      { id: "hammock-basic", name: "Basic Hammock", emoji: "🪢", cost: 20, group: "Hammocks" },
+      { id: "hammock-swing", name: "Swing Hammock", emoji: "🌙", cost: 22, group: "Hammocks" },
+      { id: "hammock-yellow-green", name: "Yellow-Green Hammock", emoji: "💛", cost: 22, group: "Hammocks" },
+      { id: "hammock-flower", name: "Flower Hammock", emoji: "🌸", cost: 23, group: "Hammocks" },
+      { id: "hammock-multi", name: "Multi-Use Hammock", emoji: "🧵", cost: 24, group: "Hammocks" },
+    ],
+  },
+  {
+    id: "umbrellas",
+    name: "Umbrellas",
+    emoji: "☂️",
+    description: "Umbrellas for sun, rain, and playful shade.",
+    variants: [
+      { id: "umbrella-paper", name: "Oil-Paper Umbrella", emoji: "🛐", cost: 18, group: "Umbrellas" },
+      { id: "umbrella-sun", name: "Small Sun Umbrella", emoji: "🌞", cost: 19, group: "Umbrellas" },
+      { id: "umbrella-beach", name: "Beach Umbrella", emoji: "⛱️", cost: 20, group: "Umbrellas" },
+      { id: "umbrella-mushroom", name: "Mushroom Umbrella", emoji: "🍄", cost: 21, group: "Umbrellas" },
+      { id: "umbrella-cat", name: "Cat Umbrella", emoji: "🐈", cost: 22, group: "Umbrellas" },
+    ],
+  },
+  {
+    id: "3d-tunnels",
+    name: "3D Tunnels",
+    emoji: "🌀",
+    description: "Curvy tunnels for racing and hide-and-seek.",
+    variants: [
+      { id: "tunnel-log", name: "Log 3D Tunnel", emoji: "🪵", cost: 22, group: "3D Tunnels" },
+      { id: "tunnel-bamboo", name: "Bamboo 3D Tunnel", emoji: "🎋", cost: 23, group: "3D Tunnels" },
+      { id: "tunnel-jam", name: "Jam 3D Tunnel", emoji: "🍓", cost: 24, group: "3D Tunnels" },
+      { id: "tunnel-star", name: "Star 3D Tunnel", emoji: "⭐", cost: 25, group: "3D Tunnels" },
+    ],
+  },
+  {
+    id: "summer-fans",
+    name: "Summer Fans",
+    emoji: "🌬️",
+    description: "Cool breezes for warm-weather play.",
+    variants: [
+      { id: "fan-rainbow", name: "Rainbow Fan", emoji: "🌈", cost: 18, group: "Summer Fans" },
+      { id: "fan-cool-breeze", name: "Cool Breeze Fan", emoji: "🌀", cost: 19, group: "Summer Fans" },
+      { id: "fan-star", name: "Star Fan", emoji: "⭐", cost: 20, group: "Summer Fans" },
+      { id: "fan-starry-handheld", name: "Starry Handheld Fan", emoji: "✨", cost: 21, group: "Summer Fans" },
+      { id: "fan-airplane", name: "Airplane Mini Fan", emoji: "✈️", cost: 22, group: "Summer Fans" },
+    ],
+  },
+  {
+    id: "soft-sofas",
+    name: "Soft Sofas",
+    emoji: "🛋️",
+    description: "Plush sofas shaped like flowers, snacks, and clouds.",
+    variants: [
+      { id: "sofa-flower", name: "Flower Sofa", emoji: "🌸", cost: 24, group: "Soft Sofas" },
+      { id: "sofa-seal", name: "Seal Sofa", emoji: "🦭", cost: 25, group: "Soft Sofas" },
+      { id: "sofa-apple", name: "Apple Sofa", emoji: "🍎", cost: 26, group: "Soft Sofas" },
+      { id: "sofa-fox", name: "Fox Sofa", emoji: "🦊", cost: 27, group: "Soft Sofas" },
+      { id: "sofa-cloud", name: "Cloud Sofa", emoji: "☁️", cost: 28, group: "Soft Sofas" },
+    ],
+  },
+];
+
+export const SHOP_ITEMS: ShopItem[] = TOOL_CATEGORIES.flatMap((category) =>
+  category.variants.map((item) => ({ ...item, group: category.name }))
+);
   { id: "food-bowl", name: "Yummy Kibble", emoji: "🍖", cost: 20, group: "Puppy Food" },
   { id: "food-bone", name: "Big Bone Treat", emoji: "🦴", cost: 35, group: "Puppy Food" },
   { id: "food-cake", name: "Puppy Birthday Cake", emoji: "🎂", cost: 60, group: "Puppy Food" },

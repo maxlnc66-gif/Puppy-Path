@@ -10,6 +10,7 @@ import {
 import {
   LEVELS,
   RESCUE_CATS,
+  RESCUE_DOGS,
   SHOP_ITEMS,
   SKILLS,
   STARTER_DOGS,
@@ -154,7 +155,7 @@ function initialState(): GameState {
     homeSlots: Array(9).fill(null),
     checkInDay: 0,
     lastCheckInDate: null,
-    rescuePets: [...STARTER_DOGS, ...RESCUE_CATS].map((pet) => ({ ...pet })),
+    rescuePets: [...RESCUE_DOGS, ...RESCUE_CATS].map((pet) => ({ ...pet })),
     followingPetIds: ["corgi"],
     homePetIds: ["orange-cat"],
     adoptedPetIds: [],

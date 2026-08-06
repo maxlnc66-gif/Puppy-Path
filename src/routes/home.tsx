@@ -219,6 +219,18 @@ function HomePage() {
         </section>
 
         <section className="mt-6 card-soft p-4 sm:p-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-2xl">Rescue gallery</h2>
+              <p className="text-base text-muted-foreground">Browse all 160 rescue pets and see every dog and cat in their happy stories.</p>
+            </div>
+            <Link to="/rescue-gallery" className="btn-pop bg-primary px-4 py-3 text-sm text-primary-foreground">
+              Open the full gallery
+            </Link>
+          </div>
+        </section>
+
+        <section className="mt-6 card-soft p-4 sm:p-6">
           <h2 className="text-2xl">Backgrounds</h2>
           <div className="mt-3 grid gap-3 md:grid-cols-2">
             {BACKGROUND_OPTIONS.map((background) => {
