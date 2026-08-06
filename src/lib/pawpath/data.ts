@@ -49,6 +49,7 @@ export interface RescuePet {
   mood: "Sad" | "Nervous" | "Calm" | "Happy" | "Very Happy";
   location: string;
   adopted: boolean;
+  adoptable?: boolean;
 }
 
 export interface Question extends QuizItem {
@@ -1480,6 +1481,9 @@ export const PUPPIES: PuppyBreed[] = [
 export const RESCUE_DOGS: RescuePet[] = makeRescuePets("dog", 80);
 export const STARTER_DOGS: RescuePet[] = RESCUE_DOGS.slice(0, 4);
 export const RESCUE_CATS: RescuePet[] = makeRescuePets("cat", 80);
+
+// Cost to adopt a pet (can be overridden later per-pet)
+export const ADOPTION_COST = 100;
 
 export const LEVELS = [
   { name: "New Puppy", need: 0, emoji: "🍼" },

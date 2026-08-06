@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { usePawPath } from "@/lib/pawpath/store";
+import { ADOPTION_COST } from "@/lib/pawpath/data";
 import { AppHeader, BottomNav } from "@/components/pawpath/AppShell";
 import { NeedsProfile } from "@/components/pawpath/NeedsProfile";
 
@@ -25,9 +26,12 @@ export const Route = createFileRoute("/rescue-gallery")({
 });
 
 function RescueGalleryPage() {
-  const { state, adoptPet, interactWithPet, togglePetSelection } = usePawPath();
+  const { state, adoptPet, claimFreeAdoption, interactWithPet, togglePetSelection } = usePawPath();
   const profile = state.profile;
   const [filter, setFilter] = useState<"all" | "dogs" | "cats" | "adopted" | "available">("all");
+  const [visibleCount, setVisibleCount] = useState(24);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
   if (!profile) return <NeedsProfile />;
 
@@ -40,6 +44,38 @@ function RescueGalleryPage() {
       return true;
     });
   }, [filter, state.rescuePets, state.adoptedPetIds]);
+
+  const visiblePets = filteredPets.slice(0, visibleCount);
+
+  function openAdoptModal(petId: string) {
+    setSelected(petId);
+  }
+
+  function closeAdoptModal() {
+    setSelected(null);
+  }
+
+  function handleAdopt(petId: string) {
+    const ok = adoptPet(petId);
+    if (ok) {
+      setMessage("Adoption successful! \ud83d\udc36");
+    } else {
+      setMessage("Not enough coins or already adopted.");
+    }
+    closeAdoptModal();
+    setTimeout(() => setMessage(null), 3000);
+  }
+
+  function handleFreeAdopt(petId: string) {
+    const ok = claimFreeAdoption(petId);
+    if (ok) {
+      setMessage("Free adoption claimed! \ud83d\udc36");
+    } else {
+      setMessage("Free adoption not available today.");
+    }
+    closeAdoptModal();
+    setTimeout(() => setMessage(null), 3000);
+  }
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -86,7 +122,7 @@ function RescueGalleryPage() {
         </section>
 
         <section className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {filteredPets.map((pet) => {
+          {visiblePets.map((pet) => {
             const adopted = state.adoptedPetIds.includes(pet.id);
             const following = state.followingPetIds.includes(pet.id);
             const home = state.homePetIds.includes(pet.id);
@@ -167,7 +203,7 @@ function RescueGalleryPage() {
                   <button
                     type="button"
                     disabled={adopted}
-                    onClick={() => adoptPet(pet.id)}
+                    onClick={() => openAdoptModal(pet.id)}
                     className={`btn-pop rounded-full px-4 py-2 text-sm ${
                       adopted ? "bg-success text-success-foreground" : "bg-primary text-primary-foreground"
                     }`}
@@ -178,6 +214,57 @@ function RescueGalleryPage() {
               </article>
             );
           })}
+
+          {visibleCount < filteredPets.length ? (
+            <div className="col-span-full flex justify-center">
+              <button
+                type="button"
+                onClick={() => setVisibleCount((v) => v + 24)}
+                className="btn-pop rounded-full bg-secondary px-6 py-3 text-sm text-secondary-foreground"
+              >
+                Load more
+              </button>
+            </div>
+          ) : null}
+
+          {message ? (
+            <div className="col-span-full mt-4 rounded-xl bg-primary/10 p-3 text-center font-semibold">{message}</div>
+          ) : null}
+
+          {selected ? (
+            (() => {
+              const pet = state.rescuePets.find((p) => p.id === selected)!;
+              const affordable = state.coins >= ADOPTION_COST;
+              const freeAvailable = state.lastFreeAdoptionDate !== new Date().toISOString().slice(0, 10);
+              return (
+                <div className="col-span-full fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+                  <div className="w-full max-w-md rounded-2xl bg-card p-6">
+                    <h3 className="text-xl font-extrabold">Adopt {pet.name}?</h3>
+                    <p className="mt-2 text-sm text-muted-foreground">{pet.breed} · Age {pet.age}</p>
+                    <p className="mt-4 text-sm">{pet.story}</p>
+                    <div className="mt-6 flex gap-2">
+                      <button
+                        onClick={() => handleAdopt(pet.id)}
+                        disabled={!affordable}
+                        className={`btn-pop rounded-2xl px-4 py-2 text-sm ${affordable ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}
+                      >
+                        Adopt for {ADOPTION_COST} coins
+                      </button>
+                      <button
+                        onClick={() => handleFreeAdopt(pet.id)}
+                        className="btn-pop rounded-2xl bg-mint px-4 py-2 text-sm text-mint-foreground"
+                      >
+                        Use free daily adoption
+                      </button>
+                      <button onClick={closeAdoptModal} className="btn-pop rounded-2xl bg-secondary px-4 py-2 text-sm text-secondary-foreground">
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()
+          ) : null}
         </section>
       </main>
       <BottomNav />

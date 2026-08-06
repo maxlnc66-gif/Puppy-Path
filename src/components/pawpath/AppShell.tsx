@@ -34,7 +34,6 @@ export function BottomNav() {
     { to: "/home", label: "Home", icon: "🏡" },
     { to: "/shop", label: "Puppy Shop", icon: "🛍️" },
     { to: "/skills", label: "My Skills", icon: "⭐" },
-    { to: "/partners", label: "Partners", icon: "🔗" },
     { to: "/parent", label: "Parent", icon: "👨‍👩‍👧" },
   ] as const;
 

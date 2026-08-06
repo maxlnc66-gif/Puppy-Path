@@ -14,6 +14,7 @@ import {
   SHOP_ITEMS,
   SKILLS,
   STARTER_DOGS,
+  ADOPTION_COST,
   type Grade,
   type Question,
   type RescuePet,
@@ -61,6 +62,7 @@ export interface GameState {
   homeSlots: Array<string | null>;
   checkInDay: number;
   lastCheckInDate: string | null;
+  lastFreeAdoptionDate?: string | null;
   rescuePets: RescuePet[];
   followingPetIds: string[];
   homePetIds: string[];
@@ -155,6 +157,7 @@ function initialState(): GameState {
     homeSlots: Array(9).fill(null),
     checkInDay: 0,
     lastCheckInDate: null,
+    lastFreeAdoptionDate: null,
     rescuePets: [...RESCUE_DOGS, ...RESCUE_CATS].map((pet) => ({ ...pet })),
     followingPetIds: ["corgi"],
     homePetIds: ["orange-cat"],
@@ -184,7 +187,8 @@ interface Store {
   claimCheckIn: () => { coins: number; rewardId: string | null } | null;
   interactWithPet: (petId: string, action: "pet" | "feed" | "play" | "brush" | "wash" | "gift") => void;
   togglePetSelection: (petId: string, list: "following" | "home") => void;
-  adoptPet: (petId: string) => void;
+  adoptPet: (petId: string, free?: boolean) => boolean;
+  claimFreeAdoption: (petId: string) => boolean;
   reset: () => void;
 }
 
@@ -390,15 +394,12 @@ export function PawPathProvider({ children }: { children: ReactNode }) {
         const nextMoodRank = Math.min(4, moodRank + (action === "gift" ? 2 : 1));
         const nextMood = ["Sad", "Nervous", "Calm", "Happy", "Very Happy"][nextMoodRank] as RescuePet["mood"];
         const nextPets = s.rescuePets.map((entry) =>
-          entry.id === petId ? { ...entry, mood: nextMood } : entry,
+          entry.id === petId ? { ...entry, mood: nextMood, adoptable: nextMood === "Very Happy" } : entry,
         );
-        const shouldAdopt = nextMood === "Very Happy" && !s.adoptedPetIds.includes(petId);
-        const nextAdopted = shouldAdopt ? [...s.adoptedPetIds, petId] : s.adoptedPetIds;
         return {
           ...s,
           coins: s.coins + rewardCoins,
           rescuePets: nextPets,
-          adoptedPetIds: nextAdopted,
         };
       });
     },
@@ -416,15 +417,46 @@ export function PawPathProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const adoptPet = useCallback((petId: string) => {
+  const adoptPet = useCallback((petId: string, free = false) => {
+    let ok = false;
     setState((s) => {
       if (s.adoptedPetIds.includes(petId)) return s;
+      const pet = s.rescuePets.find((p) => p.id === petId);
+      if (!pet) return s;
+      // cost check using ADOPTION_COST from data.ts
+      const adoptionCost = free ? 0 : ADOPTION_COST ?? 100;
+      if (!free && s.coins < adoptionCost) return s;
+      ok = true;
+      const nextPets = s.rescuePets.map((entry) => (entry.id === petId ? { ...entry, adopted: true, adoptable: false } : entry));
       return {
         ...s,
+        coins: free ? s.coins : s.coins - adoptionCost,
+        rescuePets: nextPets,
         adoptedPetIds: [...s.adoptedPetIds, petId],
         homePetIds: s.homePetIds.includes(petId) ? s.homePetIds : [...s.homePetIds, petId],
       };
     });
+    return ok;
+  }, []);
+
+  const claimFreeAdoption = useCallback((petId: string) => {
+    const today = new Date().toISOString().slice(0, 10);
+    let ok = false;
+    setState((s) => {
+      if (s.lastFreeAdoptionDate === today) return s;
+      const pet = s.rescuePets.find((p) => p.id === petId);
+      if (!pet) return s;
+      ok = true;
+      const nextPets = s.rescuePets.map((entry) => (entry.id === petId ? { ...entry, adopted: true, adoptable: false } : entry));
+      return {
+        ...s,
+        lastFreeAdoptionDate: today,
+        rescuePets: nextPets,
+        adoptedPetIds: [...s.adoptedPetIds, petId],
+        homePetIds: s.homePetIds.includes(petId) ? s.homePetIds : [...s.homePetIds, petId],
+      };
+    });
+    return ok;
   }, []);
 
   const reset = useCallback(() => setState(initialState()), []);
@@ -447,9 +479,10 @@ export function PawPathProvider({ children }: { children: ReactNode }) {
       interactWithPet,
       togglePetSelection,
       adoptPet,
+      claimFreeAdoption,
       reset,
     }),
-    [state, ready, startProfile, answer, buy, setAdventureStep, addMinutes, setGrade, unlockBackground, setBackground, setHomeSlot, clearHomeSlot, claimCheckIn, interactWithPet, togglePetSelection, adoptPet, reset],
+      [state, ready, startProfile, answer, buy, setAdventureStep, addMinutes, setGrade, unlockBackground, setBackground, setHomeSlot, clearHomeSlot, claimCheckIn, interactWithPet, togglePetSelection, adoptPet, claimFreeAdoption, reset],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
