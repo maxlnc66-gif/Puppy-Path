@@ -184,7 +184,9 @@ function HomePage() {
                   >
                     {slot ? (
                       <div className="flex flex-col items-center gap-1">
-                        <span className={`tool-icon icon-${slot}`} aria-hidden />
+                        <span className={`tool-icon icon-${slot}`} aria-hidden>
+                          {SHOP_ITEMS.find((i) => i.id === slot)?.emoji}
+                        </span>
                         <span className="text-sm">{SHOP_ITEMS.find((i) => i.id === slot)?.name ?? slot}</span>
                       </div>
                     ) : (
@@ -204,7 +206,9 @@ function HomePage() {
                     }}
                     className="flex flex-col items-center gap-2 rounded-2xl bg-secondary/70 px-3 py-3 text-sm font-extrabold"
                   >
-                    <span className={`tool-icon icon-${item.id}`} aria-hidden />
+                    <span className={`tool-icon icon-${item.id}`} aria-hidden>
+                      {item.emoji}
+                    </span>
                     <span className="text-sm">{item.name}</span>
                     <span className="text-xs text-muted-foreground">🪙 {item.cost}</span>
                   </button>

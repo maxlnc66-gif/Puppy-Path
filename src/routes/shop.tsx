@@ -107,7 +107,9 @@ function ShopPage() {
                 return (
                   <div key={item.id} className="card-soft flex items-center gap-3 p-3">
                         <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-secondary">
-                          <span className={`tool-icon icon-${item.id}`} aria-hidden />
+                          <span className={`tool-icon icon-${item.id}`} aria-hidden>
+                            {item.emoji}
+                          </span>
                           <span className="sr-only">{item.emoji}</span>
                         </span>
                     <div className="min-w-0 flex-1">

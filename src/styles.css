@@ -5,7 +5,7 @@
   width: 40px;
   height: 40px;
   display: inline-block;
-  background-image: url('/images/tools-sprite.svg');
+  background-image: url('/images/tools-sprite.png');
   background-repeat: no-repeat;
   background-size: 400px 400px; /* adjust to the real sprite size */
   background-position: 0 0;
@@ -17,16 +17,39 @@
   font-size: 20px;
 }
 
-/* Example icon positions (replace with exact positions after sprite is prepared) */
-.icon-hotel-dog-mat { background-position: 0px 0px; }
-.icon-hotel-cat-bed { background-position: -40px 0px; }
-.icon-hotel-blanket { background-position: -80px 0px; }
-.icon-hotel-pillow { background-position: -120px 0px; }
-.icon-hotel-rug { background-position: -160px 0px; }
-.icon-hotel-lamp { background-position: -200px 0px; }
-.icon-hotel-ball { background-position: -240px 0px; }
-.icon-hotel-rope { background-position: -280px 0px; }
-.icon-hotel-mouse { background-position: -320px 0px; }
+/* Icon positions for SHOP_ITEMS (10 columns grid, 40px icons). Replace sprite file with your cropped PNG. */
+.icon-food-bowl { background-position: 0px 0px; }
+.icon-food-bone { background-position: -40px 0px; }
+.icon-food-cake { background-position: -80px 0px; }
+.icon-toy-ball { background-position: -120px 0px; }
+.icon-toy-frisbee { background-position: -160px 0px; }
+.icon-toy-duck { background-position: -200px 0px; }
+.icon-cloth-hat { background-position: -240px 0px; }
+.icon-cloth-scarf { background-position: -280px 0px; }
+.icon-cloth-cape { background-position: -320px 0px; }
+.icon-room-bed { background-position: -360px 0px; }
+.icon-room-lamp { background-position: 0px -40px; }
+.icon-room-plant { background-position: -40px -40px; }
+.icon-place-beach { background-position: -80px -40px; }
+.icon-place-forest { background-position: -120px -40px; }
+.icon-place-moon { background-position: -160px -40px; }
+.icon-skill-sit { background-position: -200px -40px; }
+.icon-skill-jump { background-position: -240px -40px; }
+.icon-skill-read { background-position: -280px -40px; }
+.icon-hotel-dog-mat { background-position: -320px -40px; }
+.icon-hotel-cat-bed { background-position: -360px -40px; }
+.icon-hotel-blanket { background-position: 0px -80px; }
+.icon-hotel-pillow { background-position: -40px -80px; }
+.icon-hotel-rug { background-position: -80px -80px; }
+.icon-hotel-lamp { background-position: -120px -80px; }
+.icon-hotel-ball { background-position: -160px -80px; }
+.icon-hotel-rope { background-position: -200px -80px; }
+.icon-hotel-mouse { background-position: -240px -80px; }
+.icon-checkin-golden-bowl { background-position: -280px -80px; }
+.icon-checkin-rainbow-bed { background-position: -320px -80px; }
+.icon-event-dragon { background-position: -360px -80px; }
+.icon-event-christmas { background-position: 0px -120px; }
+.icon-event-newyear { background-position: -40px -120px; }
 @import "tailwindcss";
 @source "../src";
 @import "tw-animate-css";
