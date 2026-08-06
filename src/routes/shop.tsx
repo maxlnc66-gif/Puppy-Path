@@ -106,9 +106,10 @@ function ShopPage() {
                 const has = state.owned.includes(item.id);
                 return (
                   <div key={item.id} className="card-soft flex items-center gap-3 p-3">
-                    <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-secondary text-3xl">
-                      {item.emoji}
-                    </span>
+                        <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-secondary">
+                          <span className={`tool-icon icon-${item.id}`} aria-hidden />
+                          <span className="sr-only">{item.emoji}</span>
+                        </span>
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-display text-lg font-extrabold">{item.name}</p>
                       <p className="text-sm text-muted-foreground">🪙 {item.cost} coins</p>

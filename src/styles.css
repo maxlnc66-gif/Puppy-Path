@@ -1,3 +1,32 @@
+/* Tool sprite icon rules - uses a single sprite at /images/tools-sprite.png.
+   Replace background-position values to match the real sprite image.
+   Fallback: show item emoji text if sprite is missing. */
+.tool-icon {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  background-image: url('/images/tools-sprite.svg');
+  background-repeat: no-repeat;
+  background-size: 400px 400px; /* adjust to the real sprite size */
+  background-position: 0 0;
+  border-radius: 6px;
+}
+.tool-icon.fallback {
+  display: inline-grid;
+  place-items: center;
+  font-size: 20px;
+}
+
+/* Example icon positions (replace with exact positions after sprite is prepared) */
+.icon-hotel-dog-mat { background-position: 0px 0px; }
+.icon-hotel-cat-bed { background-position: -40px 0px; }
+.icon-hotel-blanket { background-position: -80px 0px; }
+.icon-hotel-pillow { background-position: -120px 0px; }
+.icon-hotel-rug { background-position: -160px 0px; }
+.icon-hotel-lamp { background-position: -200px 0px; }
+.icon-hotel-ball { background-position: -240px 0px; }
+.icon-hotel-rope { background-position: -280px 0px; }
+.icon-hotel-mouse { background-position: -320px 0px; }
 @import "tailwindcss";
 @source "../src";
 @import "tw-animate-css";

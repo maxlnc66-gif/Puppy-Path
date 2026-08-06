@@ -1,5 +1,5 @@
 export type Subject = "math" | "english" | "science";
-export type Grade = 3 | 4 | 5;
+export type Grade = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
 export interface QuizItem {
   prompt: string;
@@ -8,6 +8,47 @@ export interface QuizItem {
   hint: string;
   example: string;
   steps: string[];
+}
+
+export interface LearningSection {
+  id: string;
+  name: string;
+  subject: Subject;
+  grade: Grade;
+}
+
+export interface HotelBackground {
+  id: string;
+  name: string;
+  description: string;
+  cost: number;
+  emoji: string;
+  category: "free" | "normal" | "special" | "event";
+}
+
+export interface HotelItem {
+  id: string;
+  name: string;
+  emoji: string;
+  cost: number;
+  category: "comfort" | "play" | "care" | "decor" | "check-in" | "event";
+  forType?: "dog" | "cat" | "both";
+}
+
+export interface RescuePet {
+  id: string;
+  name: string;
+  type: "dog" | "cat";
+  breed: string;
+  age: number;
+  story: string;
+  personality: string;
+  favoriteFood: string;
+  favoriteToy: string;
+  favoriteItem: string;
+  mood: "Sad" | "Nervous" | "Calm" | "Happy" | "Very Happy";
+  location: string;
+  adopted: boolean;
 }
 
 export interface Question extends QuizItem {
@@ -23,6 +64,537 @@ export const SUBJECT_LABEL: Record<Subject, string> = {
   english: "English",
   science: "Science",
 };
+
+export const LEARNING_SECTIONS_BY_GRADE: Record<Grade, Record<Subject, LearningSection[]>> = {
+  1: {
+    math: [
+      { id: "numbers", name: "Numbers", subject: "math", grade: 1 },
+      { id: "counting", name: "Counting", subject: "math", grade: 1 },
+      { id: "order", name: "Number order", subject: "math", grade: 1 },
+      { id: "addition", name: "Simple addition", subject: "math", grade: 1 },
+      { id: "subtraction", name: "Simple subtraction", subject: "math", grade: 1 },
+      { id: "shapes", name: "Basic shapes", subject: "math", grade: 1 },
+      { id: "patterns", name: "Simple patterns", subject: "math", grade: 1 },
+      { id: "word-problems", name: "Simple word problems", subject: "math", grade: 1 },
+    ],
+    english: [
+      { id: "letters", name: "Letters", subject: "english", grade: 1 },
+      { id: "case", name: "Capital and small letters", subject: "english", grade: 1 },
+      { id: "sounds", name: "Letter sounds", subject: "english", grade: 1 },
+      { id: "words", name: "Simple words", subject: "english", grade: 1 },
+      { id: "spelling", name: "Basic spelling", subject: "english", grade: 1 },
+      { id: "matching", name: "Matching words and pictures", subject: "english", grade: 1 },
+      { id: "sentences", name: "Short sentences", subject: "english", grade: 1 },
+      { id: "reading", name: "Picture reading", subject: "english", grade: 1 },
+    ],
+    science: [
+      { id: "animals", name: "Animals", subject: "science", grade: 1 },
+      { id: "plants", name: "Plants", subject: "science", grade: 1 },
+      { id: "weather", name: "Weather", subject: "science", grade: 1 },
+      { id: "seasons", name: "Seasons", subject: "science", grade: 1 },
+      { id: "senses", name: "The five senses", subject: "science", grade: 1 },
+      { id: "living", name: "Living and nonliving things", subject: "science", grade: 1 },
+    ],
+  },
+  2: {
+    math: [
+      { id: "addition", name: "Addition", subject: "math", grade: 2 },
+      { id: "subtraction", name: "Subtraction", subject: "math", grade: 2 },
+      { id: "place-value", name: "Place value", subject: "math", grade: 2 },
+      { id: "compare", name: "Number comparison", subject: "math", grade: 2 },
+      { id: "time", name: "Time", subject: "math", grade: 2 },
+      { id: "money", name: "Money", subject: "math", grade: 2 },
+      { id: "shapes", name: "Shapes", subject: "math", grade: 2 },
+      { id: "measurement", name: "Measurement", subject: "math", grade: 2 },
+      { id: "word-problems", name: "Simple word problems", subject: "math", grade: 2 },
+    ],
+    english: [
+      { id: "phonics", name: "Phonics", subject: "english", grade: 2 },
+      { id: "spelling", name: "Spelling", subject: "english", grade: 2 },
+      { id: "vocabulary", name: "Vocabulary", subject: "english", grade: 2 },
+      { id: "grammar", name: "Basic grammar", subject: "english", grade: 2 },
+      { id: "nouns", name: "Nouns and verbs", subject: "english", grade: 2 },
+      { id: "sentence-order", name: "Sentence order", subject: "english", grade: 2 },
+      { id: "sentences", name: "Short sentences", subject: "english", grade: 2 },
+      { id: "reading", name: "Short reading", subject: "english", grade: 2 },
+    ],
+    science: [
+      { id: "animal-homes", name: "Animal homes", subject: "science", grade: 2 },
+      { id: "needs", name: "Animal needs", subject: "science", grade: 2 },
+      { id: "plant-parts", name: "Plant parts", subject: "science", grade: 2 },
+      { id: "plant-needs", name: "Plant needs", subject: "science", grade: 2 },
+      { id: "weather", name: "Weather", subject: "science", grade: 2 },
+      { id: "land-water", name: "Land and water", subject: "science", grade: 2 },
+      { id: "matter", name: "Matter", subject: "science", grade: 2 },
+    ],
+  },
+  3: {
+    math: [
+      { id: "addition-subtraction", name: "Addition and subtraction", subject: "math", grade: 3 },
+      { id: "multiplication", name: "Multiplication", subject: "math", grade: 3 },
+      { id: "division", name: "Division", subject: "math", grade: 3 },
+      { id: "fractions", name: "Fractions", subject: "math", grade: 3 },
+      { id: "area", name: "Area", subject: "math", grade: 3 },
+      { id: "perimeter", name: "Perimeter", subject: "math", grade: 3 },
+      { id: "measurement", name: "Measurement", subject: "math", grade: 3 },
+      { id: "word-problems", name: "Word problems", subject: "math", grade: 3 },
+    ],
+    english: [
+      { id: "vocabulary", name: "Vocabulary", subject: "english", grade: 3 },
+      { id: "spelling", name: "Spelling", subject: "english", grade: 3 },
+      { id: "grammar", name: "Grammar", subject: "english", grade: 3 },
+      { id: "nouns", name: "Nouns", subject: "english", grade: 3 },
+      { id: "verbs", name: "Verbs", subject: "english", grade: 3 },
+      { id: "adjectives", name: "Adjectives", subject: "english", grade: 3 },
+      { id: "sentence-order", name: "Sentence order", subject: "english", grade: 3 },
+      { id: "reading", name: "Reading", subject: "english", grade: 3 },
+      { id: "main-idea", name: "Main idea", subject: "english", grade: 3 },
+      { id: "supporting-details", name: "Supporting details", subject: "english", grade: 3 },
+      { id: "writing", name: "Simple writing", subject: "english", grade: 3 },
+    ],
+    science: [
+      { id: "animals", name: "Animals", subject: "science", grade: 3 },
+      { id: "plants", name: "Plants", subject: "science", grade: 3 },
+      { id: "life-cycles", name: "Life cycles", subject: "science", grade: 3 },
+      { id: "habitats", name: "Habitats", subject: "science", grade: 3 },
+      { id: "weather", name: "Weather", subject: "science", grade: 3 },
+      { id: "earth", name: "Earth", subject: "science", grade: 3 },
+      { id: "matter", name: "Matter", subject: "science", grade: 3 },
+      { id: "forces", name: "Forces and motion", subject: "science", grade: 3 },
+    ],
+  },
+  4: {
+    math: [
+      { id: "large-numbers", name: "Large numbers", subject: "math", grade: 4 },
+      { id: "place-value", name: "Place value", subject: "math", grade: 4 },
+      { id: "addition-subtraction", name: "Addition and subtraction", subject: "math", grade: 4 },
+      { id: "multiplication", name: "Multiplication", subject: "math", grade: 4 },
+      { id: "division", name: "Division", subject: "math", grade: 4 },
+      { id: "fractions", name: "Fractions", subject: "math", grade: 4 },
+      { id: "decimals", name: "Decimals", subject: "math", grade: 4 },
+      { id: "area-perimeter", name: "Area and perimeter", subject: "math", grade: 4 },
+      { id: "measurement", name: "Measurement", subject: "math", grade: 4 },
+      { id: "word-problems", name: "Word problems", subject: "math", grade: 4 },
+    ],
+    english: [
+      { id: "vocabulary", name: "Vocabulary", subject: "english", grade: 4 },
+      { id: "spelling", name: "Spelling", subject: "english", grade: 4 },
+      { id: "grammar", name: "Grammar", subject: "english", grade: 4 },
+      { id: "verb-forms", name: "Verb forms", subject: "english", grade: 4 },
+      { id: "sentence-order", name: "Sentence order", subject: "english", grade: 4 },
+      { id: "reading", name: "Reading", subject: "english", grade: 4 },
+      { id: "main-idea", name: "Main idea", subject: "english", grade: 4 },
+      { id: "supporting-details", name: "Supporting details", subject: "english", grade: 4 },
+      { id: "paragraph-writing", name: "Paragraph writing", subject: "english", grade: 4 },
+      { id: "sentence-flow", name: "Sentence flow", subject: "english", grade: 4 },
+    ],
+    science: [
+      { id: "ecosystems", name: "Ecosystems", subject: "science", grade: 4 },
+      { id: "food-chains", name: "Food chains", subject: "science", grade: 4 },
+      { id: "energy", name: "Energy", subject: "science", grade: 4 },
+      { id: "matter", name: "Matter", subject: "science", grade: 4 },
+      { id: "earth", name: "Earth", subject: "science", grade: 4 },
+      { id: "weather", name: "Weather", subject: "science", grade: 4 },
+      { id: "human-body", name: "The human body", subject: "science", grade: 4 },
+      { id: "animal-care", name: "Animal care", subject: "science", grade: 4 },
+    ],
+  },
+  5: {
+    math: [
+      { id: "fractions", name: "Fractions", subject: "math", grade: 5 },
+      { id: "decimals", name: "Decimals", subject: "math", grade: 5 },
+      { id: "multiply-divide", name: "Multiplication and division", subject: "math", grade: 5 },
+      { id: "volume", name: "Volume", subject: "math", grade: 5 },
+      { id: "geometry", name: "Geometry", subject: "math", grade: 5 },
+      { id: "graphs", name: "Coordinate graphs", subject: "math", grade: 5 },
+      { id: "order-of-operations", name: "Order of operations", subject: "math", grade: 5 },
+      { id: "measurement", name: "Measurement", subject: "math", grade: 5 },
+      { id: "word-problems", name: "Word problems", subject: "math", grade: 5 },
+    ],
+    english: [
+      { id: "vocabulary", name: "Vocabulary", subject: "english", grade: 5 },
+      { id: "grammar", name: "Grammar", subject: "english", grade: 5 },
+      { id: "reading", name: "Reading comprehension", subject: "english", grade: 5 },
+      { id: "main-idea", name: "Main idea", subject: "english", grade: 5 },
+      { id: "supporting-details", name: "Supporting details", subject: "english", grade: 5 },
+      { id: "text-evidence", name: "Text evidence", subject: "english", grade: 5 },
+      { id: "paragraph-writing", name: "Paragraph writing", subject: "english", grade: 5 },
+      { id: "summaries", name: "Summaries", subject: "english", grade: 5 },
+      { id: "sentence-flow", name: "Sentence flow", subject: "english", grade: 5 },
+    ],
+    science: [
+      { id: "living-things", name: "Living things", subject: "science", grade: 5 },
+      { id: "ecosystems", name: "Ecosystems", subject: "science", grade: 5 },
+      { id: "matter", name: "Matter", subject: "science", grade: 5 },
+      { id: "energy", name: "Energy", subject: "science", grade: 5 },
+      { id: "space", name: "Space", subject: "science", grade: 5 },
+      { id: "earth-systems", name: "Earth systems", subject: "science", grade: 5 },
+      { id: "human-body", name: "The human body", subject: "science", grade: 5 },
+      { id: "animal-care", name: "Animal care", subject: "science", grade: 5 },
+    ],
+  },
+  6: {
+    math: [
+      { id: "fractions-decimals", name: "Fractions and decimals", subject: "math", grade: 6 },
+      { id: "ratios", name: "Ratios", subject: "math", grade: 6 },
+      { id: "rates", name: "Rates", subject: "math", grade: 6 },
+      { id: "percentages", name: "Percentages", subject: "math", grade: 6 },
+      { id: "negative-numbers", name: "Negative numbers", subject: "math", grade: 6 },
+      { id: "expressions", name: "Expressions", subject: "math", grade: 6 },
+      { id: "equations", name: "Simple equations", subject: "math", grade: 6 },
+      { id: "geometry", name: "Geometry", subject: "math", grade: 6 },
+      { id: "area-volume", name: "Area and volume", subject: "math", grade: 6 },
+      { id: "word-problems", name: "Word problems", subject: "math", grade: 6 },
+    ],
+    english: [
+      { id: "vocabulary", name: "Vocabulary", subject: "english", grade: 6 },
+      { id: "grammar", name: "Grammar", subject: "english", grade: 6 },
+      { id: "verb-forms", name: "Verb forms", subject: "english", grade: 6 },
+      { id: "reading", name: "Reading comprehension", subject: "english", grade: 6 },
+      { id: "main-idea", name: "Main idea", subject: "english", grade: 6 },
+      { id: "supporting-details", name: "Supporting details", subject: "english", grade: 6 },
+      { id: "text-evidence", name: "Text evidence", subject: "english", grade: 6 },
+      { id: "paragraph-writing", name: "Paragraph writing", subject: "english", grade: 6 },
+      { id: "summaries", name: "Summaries", subject: "english", grade: 6 },
+      { id: "sentence-flow", name: "Sentence flow", subject: "english", grade: 6 },
+    ],
+    science: [
+      { id: "cells", name: "Cells", subject: "science", grade: 6 },
+      { id: "living-things", name: "Living things", subject: "science", grade: 6 },
+      { id: "ecosystems", name: "Ecosystems", subject: "science", grade: 6 },
+      { id: "matter", name: "Matter", subject: "science", grade: 6 },
+      { id: "energy", name: "Energy", subject: "science", grade: 6 },
+      { id: "earth-science", name: "Earth science", subject: "science", grade: 6 },
+      { id: "weather", name: "Weather and climate", subject: "science", grade: 6 },
+      { id: "space", name: "Space science", subject: "science", grade: 6 },
+      { id: "human-body", name: "Human body systems", subject: "science", grade: 6 },
+    ],
+  },
+  7: {
+    math: [
+      { id: "ratios", name: "Ratios and proportions", subject: "math", grade: 7 },
+      { id: "percentages", name: "Percentages", subject: "math", grade: 7 },
+      { id: "rational-numbers", name: "Rational numbers", subject: "math", grade: 7 },
+      { id: "negative-numbers", name: "Positive and negative numbers", subject: "math", grade: 7 },
+      { id: "algebra", name: "Algebra", subject: "math", grade: 7 },
+      { id: "expressions", name: "Expressions", subject: "math", grade: 7 },
+      { id: "equations", name: "Equations", subject: "math", grade: 7 },
+      { id: "geometry", name: "Geometry", subject: "math", grade: 7 },
+      { id: "probability", name: "Probability", subject: "math", grade: 7 },
+      { id: "statistics", name: "Statistics", subject: "math", grade: 7 },
+      { id: "word-problems", name: "Word problems", subject: "math", grade: 7 },
+    ],
+    english: [
+      { id: "vocabulary", name: "Vocabulary", subject: "english", grade: 7 },
+      { id: "grammar", name: "Grammar", subject: "english", grade: 7 },
+      { id: "reading", name: "Reading comprehension", subject: "english", grade: 7 },
+      { id: "main-idea", name: "Main idea", subject: "english", grade: 7 },
+      { id: "supporting-details", name: "Supporting details", subject: "english", grade: 7 },
+      { id: "text-evidence", name: "Text evidence", subject: "english", grade: 7 },
+      { id: "paragraph-writing", name: "Paragraph writing", subject: "english", grade: 7 },
+      { id: "sentence-flow", name: "Sentence flow", subject: "english", grade: 7 },
+      { id: "summaries", name: "Summaries", subject: "english", grade: 7 },
+      { id: "argument-writing", name: "Argument writing", subject: "english", grade: 7 },
+      { id: "claims-evidence", name: "Claims and evidence", subject: "english", grade: 7 },
+    ],
+    science: [
+      { id: "cells", name: "Cells and body systems", subject: "science", grade: 7 },
+      { id: "genetics", name: "Genetics", subject: "science", grade: 7 },
+      { id: "ecosystems", name: "Ecosystems", subject: "science", grade: 7 },
+      { id: "forces", name: "Forces and motion", subject: "science", grade: 7 },
+      { id: "matter", name: "Matter", subject: "science", grade: 7 },
+      { id: "energy", name: "Energy", subject: "science", grade: 7 },
+      { id: "earth-science", name: "Earth science", subject: "science", grade: 7 },
+      { id: "weather", name: "Weather and climate", subject: "science", grade: 7 },
+      { id: "space", name: "Space science", subject: "science", grade: 7 },
+    ],
+  },
+  8: {
+    math: [
+      { id: "rational-numbers", name: "Rational numbers", subject: "math", grade: 8 },
+      { id: "exponents", name: "Exponents", subject: "math", grade: 8 },
+      { id: "scientific-notation", name: "Scientific notation", subject: "math", grade: 8 },
+      { id: "linear-equations", name: "Linear equations", subject: "math", grade: 8 },
+      { id: "systems", name: "Systems of equations", subject: "math", grade: 8 },
+      { id: "functions", name: "Functions", subject: "math", grade: 8 },
+      { id: "slope", name: "Slope", subject: "math", grade: 8 },
+      { id: "geometry", name: "Geometry", subject: "math", grade: 8 },
+      { id: "transformations", name: "Transformations", subject: "math", grade: 8 },
+      { id: "statistics", name: "Statistics", subject: "math", grade: 8 },
+      { id: "word-problems", name: "Word problems", subject: "math", grade: 8 },
+    ],
+    english: [
+      { id: "vocabulary", name: "Vocabulary", subject: "english", grade: 8 },
+      { id: "grammar", name: "Grammar", subject: "english", grade: 8 },
+      { id: "reading", name: "Reading comprehension", subject: "english", grade: 8 },
+      { id: "main-idea", name: "Main idea", subject: "english", grade: 8 },
+      { id: "theme", name: "Theme", subject: "english", grade: 8 },
+      { id: "text-evidence", name: "Text evidence", subject: "english", grade: 8 },
+      { id: "compare-texts", name: "Comparing texts", subject: "english", grade: 8 },
+      { id: "paragraph-writing", name: "Paragraph writing", subject: "english", grade: 8 },
+      { id: "essay-writing", name: "Essay writing", subject: "english", grade: 8 },
+      { id: "argument-writing", name: "Argument writing", subject: "english", grade: 8 },
+      { id: "sentence-flow", name: "Sentence flow", subject: "english", grade: 8 },
+      { id: "revision", name: "Revision and editing", subject: "english", grade: 8 },
+    ],
+    science: [
+      { id: "cells", name: "Cells and genetics", subject: "science", grade: 8 },
+      { id: "ecosystems", name: "Ecosystems", subject: "science", grade: 8 },
+      { id: "forces", name: "Forces and motion", subject: "science", grade: 8 },
+      { id: "energy", name: "Energy", subject: "science", grade: 8 },
+      { id: "waves", name: "Waves", subject: "science", grade: 8 },
+      { id: "matter", name: "Matter", subject: "science", grade: 8 },
+      { id: "chemical-changes", name: "Chemical changes", subject: "science", grade: 8 },
+      { id: "earth-systems", name: "Earth systems", subject: "science", grade: 8 },
+      { id: "weather", name: "Weather and climate", subject: "science", grade: 8 },
+      { id: "space", name: "Space science", subject: "science", grade: 8 },
+    ],
+  },
+  9: {
+    math: [
+      { id: "expressions", name: "Algebraic expressions", subject: "math", grade: 9 },
+      { id: "linear-equations", name: "Linear equations", subject: "math", grade: 9 },
+      { id: "inequalities", name: "Linear inequalities", subject: "math", grade: 9 },
+      { id: "systems", name: "Systems of equations", subject: "math", grade: 9 },
+      { id: "functions", name: "Functions", subject: "math", grade: 9 },
+      { id: "exponents", name: "Exponents", subject: "math", grade: 9 },
+      { id: "polynomials", name: "Polynomials", subject: "math", grade: 9 },
+      { id: "factoring", name: "Factoring", subject: "math", grade: 9 },
+      { id: "coordinate-geometry", name: "Coordinate geometry", subject: "math", grade: 9 },
+      { id: "statistics", name: "Statistics", subject: "math", grade: 9 },
+      { id: "word-problems", name: "Word problems", subject: "math", grade: 9 },
+    ],
+    english: [
+      { id: "academic-vocabulary", name: "Academic vocabulary", subject: "english", grade: 9 },
+      { id: "grammar", name: "Grammar", subject: "english", grade: 9 },
+      { id: "reading", name: "Reading comprehension", subject: "english", grade: 9 },
+      { id: "theme", name: "Theme", subject: "english", grade: 9 },
+      { id: "character-analysis", name: "Character analysis", subject: "english", grade: 9 },
+      { id: "text-evidence", name: "Text evidence", subject: "english", grade: 9 },
+      { id: "literary-analysis", name: "Literary analysis", subject: "english", grade: 9 },
+      { id: "informational-texts", name: "Informational texts", subject: "english", grade: 9 },
+      { id: "essay-structure", name: "Essay structure", subject: "english", grade: 9 },
+      { id: "argument-writing", name: "Argument writing", subject: "english", grade: 9 },
+      { id: "claims-evidence", name: "Claims and evidence", subject: "english", grade: 9 },
+      { id: "revision", name: "Revision and editing", subject: "english", grade: 9 },
+    ],
+    science: [
+      { id: "biology", name: "Biology", subject: "science", grade: 9 },
+      { id: "cells", name: "Cells", subject: "science", grade: 9 },
+      { id: "genetics", name: "Genetics", subject: "science", grade: 9 },
+      { id: "evolution", name: "Evolution", subject: "science", grade: 9 },
+      { id: "ecosystems", name: "Ecosystems", subject: "science", grade: 9 },
+      { id: "matter", name: "Matter", subject: "science", grade: 9 },
+      { id: "energy", name: "Energy", subject: "science", grade: 9 },
+      { id: "forces", name: "Forces and motion", subject: "science", grade: 9 },
+      { id: "earth-science", name: "Earth science", subject: "science", grade: 9 },
+      { id: "environmental-science", name: "Environmental science", subject: "science", grade: 9 },
+    ],
+  },
+  10: {
+    math: [
+      { id: "algebra", name: "Algebra", subject: "math", grade: 10 },
+      { id: "quadratic-equations", name: "Quadratic equations", subject: "math", grade: 10 },
+      { id: "functions", name: "Functions", subject: "math", grade: 10 },
+      { id: "polynomials", name: "Polynomials", subject: "math", grade: 10 },
+      { id: "exponents", name: "Exponents", subject: "math", grade: 10 },
+      { id: "radicals", name: "Radicals", subject: "math", grade: 10 },
+      { id: "coordinate-geometry", name: "Coordinate geometry", subject: "math", grade: 10 },
+      { id: "triangle-geometry", name: "Triangle geometry", subject: "math", grade: 10 },
+      { id: "circles", name: "Circles", subject: "math", grade: 10 },
+      { id: "probability", name: "Probability", subject: "math", grade: 10 },
+      { id: "statistics", name: "Statistics", subject: "math", grade: 10 },
+      { id: "word-problems", name: "Multi-step word problems", subject: "math", grade: 10 },
+    ],
+    english: [
+      { id: "academic-vocabulary", name: "Academic vocabulary", subject: "english", grade: 10 },
+      { id: "advanced-grammar", name: "Advanced grammar", subject: "english", grade: 10 },
+      { id: "reading", name: "Reading comprehension", subject: "english", grade: 10 },
+      { id: "theme", name: "Theme and central idea", subject: "english", grade: 10 },
+      { id: "literary-analysis", name: "Literary analysis", subject: "english", grade: 10 },
+      { id: "text-evidence", name: "Text evidence", subject: "english", grade: 10 },
+      { id: "comparing-sources", name: "Comparing sources", subject: "english", grade: 10 },
+      { id: "research-skills", name: "Research skills", subject: "english", grade: 10 },
+      { id: "essay-writing", name: "Essay writing", subject: "english", grade: 10 },
+      { id: "argument-writing", name: "Argument writing", subject: "english", grade: 10 },
+      { id: "claims-evidence", name: "Claims, evidence, and reasoning", subject: "english", grade: 10 },
+      { id: "revision", name: "Revision and editing", subject: "english", grade: 10 },
+    ],
+    science: [
+      { id: "biology", name: "Biology", subject: "science", grade: 10 },
+      { id: "chemistry", name: "Chemistry", subject: "science", grade: 10 },
+      { id: "physics", name: "Physics", subject: "science", grade: 10 },
+      { id: "genetics", name: "Genetics", subject: "science", grade: 10 },
+      { id: "ecosystems", name: "Ecosystems", subject: "science", grade: 10 },
+      { id: "chemical-reactions", name: "Chemical reactions", subject: "science", grade: 10 },
+      { id: "forces", name: "Forces and motion", subject: "science", grade: 10 },
+      { id: "energy", name: "Energy", subject: "science", grade: 10 },
+      { id: "waves", name: "Waves", subject: "science", grade: 10 },
+      { id: "earth-science", name: "Earth science", subject: "science", grade: 10 },
+      { id: "environmental-science", name: "Environmental science", subject: "science", grade: 10 },
+    ],
+  },
+};
+
+export function getLearningSections(grade: Grade, subject: Subject): LearningSection[] {
+  return LEARNING_SECTIONS_BY_GRADE[grade][subject] ?? [];
+}
+
+function buildMathPrompt(grade: Grade, section: string): QuizItem {
+  const baseA = 5 + grade;
+  const baseB = 3 + (grade % 4);
+  switch (section) {
+    case "addition":
+    case "addition-subtraction":
+      return {
+        prompt: `A rescue hotel has ${baseA} dog beds and ${baseB} cat beds. How many beds are there in all?`,
+        options: [`${baseA + baseB}`, `${baseA - baseB}`, `${baseA * 2}`, `${baseA + 1}`],
+        answer: 0,
+        hint: "Add the two groups together.",
+        example: "5 + 2 = 7.",
+        steps: ["Count the first group.", "Count the second group.", "Put the groups together."],
+      };
+    case "subtraction":
+      return {
+        prompt: `The hotel used ${baseA + 4} towels. ${baseA} towels are clean. How many are not clean?`,
+        options: [`${baseA + 4 - baseA}`, `${baseA + 2}`, `${baseA + 10}`, `${baseA - 1}`],
+        answer: 0,
+        hint: "Take away the clean towels.",
+        example: "8 - 3 = 5.",
+        steps: ["Start with the total.", "Take away the clean towels.", "Count what is left."],
+      };
+    case "word-problems":
+      return {
+        prompt: `${baseA} pets need a snack. ${baseB} snacks are already ready. How many more snacks are needed?`,
+        options: [`${baseA - baseB}`, `${baseA + baseB}`, `${baseA * 2}`, `${baseA + 5}`],
+        answer: 0,
+        hint: "Find the missing part.",
+        example: "7 - 2 = 5.",
+        steps: ["Start with the total number of pets.", "Take away the snacks already ready.", "Count the missing snacks."],
+      };
+    default:
+      return {
+        prompt: `Choose the number that matches the rescue hotel count for ${section}.`,
+        options: [`${baseA}`, `${baseA + 1}`, `${baseA + 2}`, `${baseA + 3}`],
+        answer: 0,
+        hint: "Look at the clue and count carefully.",
+        example: "Count one by one.",
+        steps: ["Read the clue.", "Count the items.", "Pick the matching number."],
+      };
+  }
+}
+
+function buildEnglishPrompt(section: string): QuizItem {
+  switch (section) {
+    case "letters":
+      return {
+        prompt: "Which letter comes after the letter A?",
+        options: ["B", "C", "D", "E"],
+        answer: 0,
+        hint: "Think about the alphabet order.",
+        example: "A comes before B.",
+        steps: ["Say the alphabet.", "Find the next letter after A.", "Pick B."],
+      };
+    case "spelling":
+      return {
+        prompt: "Which word is spelled correctly?",
+        options: ["cat", "czt", "caat", "catt"],
+        answer: 0,
+        hint: "Check each letter carefully.",
+        example: "C-A-T spells cat.",
+        steps: ["Look at each letter.", "Match the letters to the word.", "Choose the correct spelling."],
+      };
+    case "sentence-order":
+      return {
+        prompt: "Which sentence is in the right order?",
+        options: ["The dog runs fast.", "Runs fast the dog.", "Fast the dog runs.", "Dog the fast runs."],
+        answer: 0,
+        hint: "A sentence usually starts with the naming word.",
+        example: "The cat sleeps.",
+        steps: ["Start with the naming word.", "Add the action.", "Finish the sentence."],
+      };
+    default:
+      return {
+        prompt: `Choose the best word for the rescue hotel story about ${section}.`,
+        options: ["safe", "jump", "blue", "quick"],
+        answer: 0,
+        hint: "Think about the meaning.",
+        example: "A safe home is a kind home.",
+        steps: ["Read the clue.", "Think about the meaning.", "Pick the best word."],
+      };
+  }
+}
+
+function buildSciencePrompt(section: string): QuizItem {
+  switch (section) {
+    case "plants":
+      return {
+        prompt: "What do plants need to grow?",
+        options: ["Sunlight and water", "Sand and rocks", "Snow and ice", "Mud and smoke"],
+        answer: 0,
+        hint: "Plants grow with help from nature.",
+        example: "A plant needs water and light.",
+        steps: ["Think about what helps a plant live.", "Use the clue.", "Choose the best answer."],
+      };
+    case "animals":
+      return {
+        prompt: "Which animal can live in a rescue hotel?",
+        options: ["Dog", "Rock", "Cloud", "Desk"],
+        answer: 0,
+        hint: "Choose a living animal.",
+        example: "A dog is a living animal.",
+        steps: ["Think about living things.", "Pick the animal.", "Choose the correct answer."],
+      };
+    case "weather":
+      return {
+        prompt: "What do we wear when the weather is cold?",
+        options: ["A coat", "A swimsuit", "Sunglasses", "A hat"],
+        answer: 0,
+        hint: "Cold weather needs warm clothes.",
+        example: "A coat helps keep us warm.",
+        steps: ["Think about the weather.", "Pick a warm item.", "Choose the best answer."],
+      };
+    default:
+      return {
+        prompt: `Which idea fits the rescue hotel topic ${section}?`,
+        options: ["Helpful", "Silent", "Empty", "Dark"],
+        answer: 0,
+        hint: "Look for the best idea.",
+        example: "A warm home is helpful.",
+        steps: ["Read the clue.", "Think about the topic.", "Pick the best answer."],
+      };
+  }
+}
+
+export function buildLearningQuestion(grade: Grade, subject: Subject, sectionId: string): Question {
+  const section = getLearningSections(grade, subject).find((item) => item.id === sectionId)?.name ?? sectionId;
+  const base = subject === "math"
+    ? buildMathPrompt(grade, sectionId)
+    : subject === "english"
+      ? buildEnglishPrompt(sectionId)
+      : buildSciencePrompt(sectionId);
+  return {
+    id: `${subject}-${sectionId}-${grade}`,
+    subject,
+    skill: `${subject}-${sectionId}`,
+    grade,
+    prompt: base.prompt,
+    options: base.options,
+    answer: base.answer,
+    hint: base.hint,
+    example: base.example,
+    steps: base.steps,
+    practice: {
+      ...base,
+      prompt: `${base.prompt} Try the similar rescue hotel question.`,
+      options: [...base.options],
+    },
+  };
+}
+
+export function getGradeLabel(grade: Grade): string {
+  return `Grade ${grade}`;
+}
 
 export interface SkillInfo {
   id: string;
@@ -740,11 +1312,13 @@ export const ADVENTURES: Adventure[] = [
 
 export function pickQuestion(subject: Subject, skill: string, grade: Grade): Question {
   const pool = QUESTIONS.filter((q) => q.subject === subject && q.skill === skill);
-  if (pool.length === 0) return QUESTIONS[0]!;
-  return pool.reduce(
-    (best, q) => (Math.abs(q.grade - grade) < Math.abs(best.grade - grade) ? q : best),
-    pool[0]!,
-  );
+  if (pool.length > 0) {
+    return pool.reduce(
+      (best, q) => (Math.abs(q.grade - grade) < Math.abs(best.grade - grade) ? q : best),
+      pool[0]!,
+    );
+  }
+  return buildLearningQuestion(grade, subject, skill.replace(`${subject}-`, ""));
 }
 
 export const questionById = (id: string): Question | undefined =>
@@ -761,6 +1335,119 @@ export const PUPPIES: PuppyBreed[] = [
   { id: "frost", name: "Snow Pup", emoji: "🐺" },
   { id: "cocoa", name: "Cocoa Pup", emoji: "🐕" },
   { id: "pepper", name: "Spotty Pup", emoji: "🐩" },
+  { id: "milo", name: "Milo", emoji: "🐕" },
+  { id: "luna", name: "Luna", emoji: "🐱" },
+];
+
+export const STARTER_DOGS: RescuePet[] = [
+  {
+    id: "corgi",
+    name: "Coco",
+    type: "dog",
+    breed: "Corgi",
+    age: 2,
+    story: "Coco was found near a park and now waits for a safe home.",
+    personality: "Kind and curious",
+    favoriteFood: "Chicken bites",
+    favoriteToy: "Rope toy",
+    favoriteItem: "Soft dog bed",
+    mood: "Nervous",
+    location: "Main House Area",
+    adopted: false,
+  },
+  {
+    id: "shiba",
+    name: "Mochi",
+    type: "dog",
+    breed: "Shiba Inu",
+    age: 3,
+    story: "Mochi was rescued after getting lost on a rainy day.",
+    personality: "Brave and playful",
+    favoriteFood: "Rice treats",
+    favoriteToy: "Ball",
+    favoriteItem: "Blanket",
+    mood: "Calm",
+    location: "Play Area",
+    adopted: false,
+  },
+  {
+    id: "labrador",
+    name: "Poppy",
+    type: "dog",
+    breed: "Labrador",
+    age: 4,
+    story: "Poppy was rescued from a busy road and now loves gentle care.",
+    personality: "Friendly and cheerful",
+    favoriteFood: "Salmon bites",
+    favoriteToy: "Frisbee",
+    favoriteItem: "Hammock",
+    mood: "Happy",
+    location: "Food Area",
+    adopted: false,
+  },
+  {
+    id: "beagle",
+    name: "Teddy",
+    type: "dog",
+    breed: "Beagle",
+    age: 3,
+    story: "Teddy was found near a garden and now loves calm walks.",
+    personality: "Gentle and friendly",
+    favoriteFood: "Apple slices",
+    favoriteToy: "Squeaky toy",
+    favoriteItem: "Pillow",
+    mood: "Happy",
+    location: "Sleeping Area",
+    adopted: false,
+  },
+];
+
+export const RESCUE_CATS: RescuePet[] = [
+  {
+    id: "orange-cat",
+    name: "Sunny",
+    type: "cat",
+    breed: "Orange Cat",
+    age: 2,
+    story: "Sunny was found beside a garden and now loves warm windows.",
+    personality: "Gentle and sunny",
+    favoriteFood: "Tuna bits",
+    favoriteToy: "Plush mouse",
+    favoriteItem: "Cat bed",
+    mood: "Calm",
+    location: "Sleeping Area",
+    adopted: false,
+  },
+  {
+    id: "siamese",
+    name: "Mina",
+    type: "cat",
+    breed: "Siamese",
+    age: 3,
+    story: "Mina was rescued from a cold shelter and now loves soft blankets.",
+    personality: "Curious and calm",
+    favoriteFood: "Chicken flakes",
+    favoriteToy: "Bell toy",
+    favoriteItem: "Cat cave",
+    mood: "Happy",
+    location: "Medical Care Area",
+    adopted: false,
+  },
+  {
+    id: "ragdoll",
+    name: "Lulu",
+    type: "cat",
+    breed: "Ragdoll",
+    age: 4,
+    story: "Lulu was rescued from a busy street and now loves soft baskets.",
+    personality: "Calm and sweet",
+    favoriteFood: "Salmon flakes",
+    favoriteToy: "Tunnel toy",
+    favoriteItem: "Soft basket",
+    mood: "Nervous",
+    location: "Play Area",
+    adopted: false,
+  },
 ];
 
 export const LEVELS = [
@@ -776,7 +1463,10 @@ export interface ShopItem {
   name: string;
   emoji: string;
   cost: number;
-  group: "Puppy Food" | "Toys" | "Clothes" | "Puppy Room" | "New Places" | "Puppy Skills";
+  group: "Puppy Food" | "Toys" | "Clothes" | "Puppy Room" | "New Places" | "Puppy Skills" | "Rescue Hotel" | "Limited Events" | "Check-In";
+  category?: "comfort" | "play" | "care" | "decor" | "check-in" | "event";
+  limitedForDays?: number;
+  eventName?: string;
 }
 
 export const SHOP_ITEMS: ShopItem[] = [
@@ -798,4 +1488,46 @@ export const SHOP_ITEMS: ShopItem[] = [
   { id: "skill-sit", name: "Sit and Stay", emoji: "🐾", cost: 40, group: "Puppy Skills" },
   { id: "skill-jump", name: "Super Jump", emoji: "✨", cost: 70, group: "Puppy Skills" },
   { id: "skill-read", name: "Read Along", emoji: "📖", cost: 100, group: "Puppy Skills" },
+  { id: "hotel-dog-mat", name: "Dog mat", emoji: "🧸", cost: 28, group: "Rescue Hotel", category: "comfort", forType: "dog" },
+  { id: "hotel-cat-bed", name: "Cat bed", emoji: "🛏️", cost: 32, group: "Rescue Hotel", category: "comfort", forType: "cat" },
+  { id: "hotel-blanket", name: "Warm blanket", emoji: "🧵", cost: 26, group: "Rescue Hotel", category: "comfort", forType: "both" },
+  { id: "hotel-pillow", name: "Soft pillow", emoji: "🛋️", cost: 24, group: "Rescue Hotel", category: "comfort", forType: "both" },
+  { id: "hotel-rug", name: "Cute rug", emoji: "🧶", cost: 30, group: "Rescue Hotel", category: "decor", forType: "both" },
+  { id: "hotel-lamp", name: "Cute lamp", emoji: "💡", cost: 34, group: "Rescue Hotel", category: "decor", forType: "both" },
+  { id: "hotel-ball", name: "Small ball", emoji: "⚽", cost: 22, group: "Rescue Hotel", category: "play", forType: "both" },
+  { id: "hotel-rope", name: "Rope toy", emoji: "🪢", cost: 26, group: "Rescue Hotel", category: "play", forType: "dog" },
+  { id: "hotel-mouse", name: "Plush mouse", emoji: "🐭", cost: 24, group: "Rescue Hotel", category: "play", forType: "cat" },
+  { id: "checkin-golden-bowl", name: "Golden bowl", emoji: "🥣", cost: 0, group: "Check-In", category: "check-in", limitedForDays: 7 },
+  { id: "checkin-rainbow-bed", name: "Rainbow bed", emoji: "🌈", cost: 0, group: "Check-In", category: "check-in", limitedForDays: 7 },
+  { id: "event-dragon", name: "Dragon Boat bed", emoji: "🛏️", cost: 60, group: "Limited Events", category: "event", limitedForDays: 7, eventName: "Dragon Boat Festival" },
+  { id: "event-christmas", name: "Christmas tree", emoji: "🎄", cost: 70, group: "Limited Events", category: "event", limitedForDays: 14, eventName: "Christmas" },
+  { id: "event-newyear", name: "New Year lantern", emoji: "🏮", cost: 64, group: "Limited Events", category: "event", limitedForDays: 30, eventName: "New Year" },
+];
+
+export const BACKGROUND_OPTIONS: HotelBackground[] = [
+  { id: "yard", name: "Simple Rescue Yard", description: "A bright start for every new rescue hotel.", cost: 0, emoji: "🌿", category: "free" },
+  { id: "wood", name: "Warm Wooden Hotel", description: "Cozy rooms and a sunny porch.", cost: 40, emoji: "🪵", category: "normal" },
+  { id: "garden", name: "Flower Garden", description: "Soft flowers and happy pet paths.", cost: 70, emoji: "🌸", category: "normal" },
+  { id: "forest", name: "Forest Rescue Home", description: "A calm hidden home in the trees.", cost: 100, emoji: "🌲", category: "special" },
+  { id: "beach", name: "Beach Pet Hotel", description: "Warm sand and sea breeze.", cost: 140, emoji: "🏖️", category: "special" },
+  { id: "snow", name: "Snow Rescue Home", description: "A wintry rescue home with lights.", cost: 180, emoji: "❄️", category: "special" },
+  { id: "night", name: "Night Light Garden", description: "A glowing rescue hotel at sunset.", cost: 220, emoji: "🌙", category: "event" },
+];
+
+export const HOTEL_ITEMS: HotelItem[] = [
+  { id: "dog-mat", name: "Dog mat", emoji: "🧸", cost: 18, category: "comfort", forType: "dog" },
+  { id: "soft-bed", name: "Soft bed", emoji: "🛏️", cost: 24, category: "comfort", forType: "dog" },
+  { id: "blanket", name: "Blanket", emoji: "🧵", cost: 16, category: "comfort", forType: "both" },
+  { id: "pillow", name: "Pillow", emoji: "🛋️", cost: 14, category: "comfort", forType: "both" },
+  { id: "toy-ball", name: "Ball", emoji: "⚽", cost: 12, category: "play", forType: "both" },
+  { id: "rope-toy", name: "Rope toy", emoji: "🪢", cost: 14, category: "play", forType: "dog" },
+  { id: "plush-mouse", name: "Plush mouse", emoji: "🐭", cost: 13, category: "play", forType: "cat" },
+  { id: "food-bowl", name: "Food bowl", emoji: "🥣", cost: 10, category: "care", forType: "both" },
+  { id: "water-bowl", name: "Water bowl", emoji: "💧", cost: 10, category: "care", forType: "both" },
+  { id: "brush", name: "Brush", emoji: "🪮", cost: 15, category: "care", forType: "both" },
+  { id: "lamp", name: "Lamp", emoji: "💡", cost: 18, category: "decor", forType: "both" },
+  { id: "rug", name: "Rug", emoji: "🧶", cost: 18, category: "decor", forType: "both" },
+  { id: "flower-pot", name: "Flower pot", emoji: "🪴", cost: 16, category: "decor", forType: "both" },
+  { id: "star-toy", name: "Star toy", emoji: "⭐", cost: 20, category: "check-in", forType: "both" },
+  { id: "rainbow-bed", name: "Rainbow bed", emoji: "🌈", cost: 24, category: "check-in", forType: "both" },
 ];

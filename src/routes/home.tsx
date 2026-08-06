@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ADVENTURES } from "@/lib/pawpath/data";
+import { useMemo, useState } from "react";
+import { ADVENTURES, BACKGROUND_OPTIONS, getLearningSections, SUBJECT_LABEL, SHOP_ITEMS, type Grade, type Subject } from "@/lib/pawpath/data";
 import { levelInfo, usePawPath, weakSkills } from "@/lib/pawpath/store";
 import { AppHeader, BottomNav } from "@/components/pawpath/AppShell";
 import { PuppyImage } from "@/components/pawpath/PuppyImage";
@@ -32,13 +33,31 @@ const COLOR_CLASS: Record<string, string> = {
 };
 
 function HomePage() {
-  const { state } = usePawPath();
+  const { state, setGrade, unlockBackground, setBackground, setHomeSlot, clearHomeSlot, claimCheckIn, interactWithPet, togglePetSelection, adoptPet } = usePawPath();
   const profile = state.profile;
+  const [activeSubject, setActiveSubject] = useState<Subject>("math");
+  const [message, setMessage] = useState("");
   if (!profile) return <NeedsProfile />;
 
   const info = levelInfo(state.xp);
   const weak = weakSkills(state).slice(0, 3);
   const todayAdventure = ADVENTURES[0]!;
+  const sections = useMemo(() => getLearningSections(profile.grade, activeSubject), [profile.grade, activeSubject]);
+  const selectedBackground = BACKGROUND_OPTIONS.find((bg) => bg.id === state.backgroundId) ?? BACKGROUND_OPTIONS[0]!;
+
+  function buyBackground(backgroundId: string, cost: number) {
+    const ok = unlockBackground(backgroundId, cost);
+    setMessage(ok ? `New background unlocked! ${backgroundId}` : "You need more coins for that background.");
+  }
+
+  function handleCheckIn() {
+    const result = claimCheckIn();
+    if (result) {
+      setMessage(`Check-in complete! You earned ${result.coins} coins.`);
+    } else {
+      setMessage("You already checked in today.");
+    }
+  }
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -86,6 +105,159 @@ function HomePage() {
                 </span>
               </div>
             </div>
+          </div>
+        </section>
+
+        {message ? <p className="mt-4 rounded-2xl border border-border bg-sunny/80 px-4 py-3 text-base font-bold text-sunny-foreground">{message}</p> : null}
+
+        <section className="mt-6 card-soft p-4 sm:p-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-2xl">Choose a grade</h2>
+              <p className="text-base text-muted-foreground">Each grade has new learning paths and rescue-hotel goals.</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {([1,2,3,4,5,6,7,8,9,10] as Grade[]).map((grade) => (
+                <button key={grade} type="button" onClick={() => { setGrade(grade); setMessage(`Grade ${grade} is ready.`); }} className={`btn-pop rounded-xl px-3 py-2 text-sm font-extrabold ${profile.grade === grade ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground"}`}>
+                  Grade {grade}
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-6 card-soft p-4 sm:p-6">
+          <div className="flex flex-wrap gap-2">
+            {(["math", "english", "science"] as Subject[]).map((subject) => (
+              <button key={subject} type="button" onClick={() => setActiveSubject(subject)} className={`btn-pop rounded-2xl px-4 py-3 text-lg font-extrabold ${activeSubject === subject ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground"}`}>
+                {SUBJECT_LABEL[subject]}
+              </button>
+            ))}
+          </div>
+          <div className="mt-4 grid gap-3 md:grid-cols-2">
+            {sections.map((section) => (
+              <article key={section.id} className="rounded-2xl border border-border bg-card/80 p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-lg font-extrabold">{section.name}</p>
+                    <p className="text-sm text-muted-foreground">Progress 60%</p>
+                  </div>
+                  <span className="rounded-full bg-primary/10 px-3 py-1 text-sm font-extrabold text-primary">Start</span>
+                </div>
+                <div className="mt-3 flex gap-2 text-sm text-muted-foreground">
+                  <span>✅ 4 done</span>
+                  <span>❌ 1 wrong</span>
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <Link to="/practice/$skillId" params={{ skillId: `${activeSubject}-${section.id}` }} className="btn-pop bg-primary px-4 py-2 text-sm text-primary-foreground">Start</Link>
+                  <Link to="/practice/$skillId" params={{ skillId: `${activeSubject}-${section.id}` }} className="btn-pop bg-secondary px-4 py-2 text-sm text-secondary-foreground">Practice</Link>
+                  {section.name.toLowerCase().includes("word") || section.name.toLowerCase().includes("grammar") || section.name.toLowerCase().includes("reading") ? <button type="button" className="btn-pop bg-mint px-4 py-2 text-sm text-mint-foreground">Weak-skill</button> : null}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-6 card-soft p-4 sm:p-6">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h2 className="text-2xl">Rescue Hotel Home</h2>
+              <p className="text-base text-muted-foreground">Move nine items, rescue pets, and build a happy home.</p>
+            </div>
+            <button type="button" onClick={handleCheckIn} className="btn-pop bg-primary px-4 py-3 text-base text-primary-foreground">🗓️ Daily Check-In</button>
+          </div>
+          <div className="mt-4 rounded-[2rem] border border-border bg-[linear-gradient(135deg,#fce7b6_0%,#fff7d6_35%,#b8f3c7_100%)] p-4">
+            <div className="rounded-[1.5rem] border border-border bg-white/60 p-3">
+              <div className="mb-3 flex items-center justify-between text-sm font-extrabold">
+                <span>Background: {selectedBackground.name}</span>
+                <span>🪙 {state.coins}</span>
+              </div>
+              <div className="grid gap-2 sm:grid-cols-3">
+                {state.homeSlots.map((slot, index) => (
+                  <button
+                    key={`${slot ?? "empty"}-${index}`}
+                    type="button"
+                    onClick={() => {
+                      if (slot) clearHomeSlot(index);
+                    }}
+                    className="flex h-24 items-center justify-center rounded-2xl border border-dashed border-border bg-card/80 text-2xl"
+                  >
+                    {slot ? (
+                      <div className="flex flex-col items-center gap-1">
+                        <span className={`tool-icon icon-${slot}`} aria-hidden />
+                        <span className="text-sm">{SHOP_ITEMS.find((i) => i.id === slot)?.name ?? slot}</span>
+                      </div>
+                    ) : (
+                      <span className="text-sm text-muted-foreground">Slot {index + 1}</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+              <div className="mt-3 grid grid-cols-3 gap-3">
+                {SHOP_ITEMS.filter((i) => i.group === "Rescue Hotel").slice(0, 9).map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => {
+                      const slot = state.homeSlots.findIndex((entry) => entry === null);
+                      if (slot >= 0) setHomeSlot(slot, item.id);
+                    }}
+                    className="flex flex-col items-center gap-2 rounded-2xl bg-secondary/70 px-3 py-3 text-sm font-extrabold"
+                  >
+                    <span className={`tool-icon icon-${item.id}`} aria-hidden />
+                    <span className="text-sm">{item.name}</span>
+                    <span className="text-xs text-muted-foreground">🪙 {item.cost}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-6 card-soft p-4 sm:p-6">
+          <h2 className="text-2xl">Backgrounds</h2>
+          <div className="mt-3 grid gap-3 md:grid-cols-2">
+            {BACKGROUND_OPTIONS.map((background) => {
+              const owned = state.ownedBackgroundIds.includes(background.id);
+              return (
+                <div key={background.id} className="rounded-2xl border border-border bg-card/70 p-4">
+                  <p className="text-lg font-extrabold">{background.name}</p>
+                  <p className="text-sm text-muted-foreground">{background.description}</p>
+                  <p className="mt-2 text-sm font-extrabold">{background.emoji} {background.cost === 0 ? "Free" : `${background.cost} coins`}</p>
+                  <div className="mt-3 flex gap-2">
+                    <button type="button" onClick={() => setBackground(background.id)} className="btn-pop bg-primary px-3 py-2 text-sm text-primary-foreground">Preview</button>
+                    {!owned ? <button type="button" onClick={() => buyBackground(background.id, background.cost)} className="btn-pop bg-secondary px-3 py-2 text-sm text-secondary-foreground">Buy</button> : <span className="rounded-xl bg-success px-3 py-2 text-sm font-extrabold text-success-foreground">Owned</span>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="mt-6 card-soft p-4 sm:p-6">
+          <h2 className="text-2xl">Rescue pets</h2>
+          <div className="mt-3 grid gap-3 md:grid-cols-2">
+            {state.rescuePets.map((pet) => (
+              <article key={pet.id} className="rounded-2xl border border-border bg-card/70 p-4">
+                <div className="flex items-center justify-between gap-2">
+                  <div>
+                    <p className="text-lg font-extrabold">{pet.name}</p>
+                    <p className="text-sm text-muted-foreground">{pet.breed} · {pet.type}</p>
+                  </div>
+                  <span className="rounded-full bg-mint px-3 py-1 text-sm font-extrabold text-mint-foreground">{pet.mood}</span>
+                </div>
+                <p className="mt-2 text-sm">{pet.story}</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <button type="button" onClick={() => interactWithPet(pet.id, "pet")} className="btn-pop bg-primary px-3 py-2 text-sm text-primary-foreground">Pet</button>
+                  <button type="button" onClick={() => interactWithPet(pet.id, "feed")} className="btn-pop bg-secondary px-3 py-2 text-sm text-secondary-foreground">Feed</button>
+                  <button type="button" onClick={() => interactWithPet(pet.id, "play")} className="btn-pop bg-berry px-3 py-2 text-sm text-berry-foreground">Play</button>
+                  <button type="button" onClick={() => interactWithPet(pet.id, "gift")} className="btn-pop bg-mint px-3 py-2 text-sm text-mint-foreground">Gift</button>
+                  <button type="button" onClick={() => togglePetSelection(pet.id, "following")} className="btn-pop bg-card px-3 py-2 text-sm">Follow</button>
+                  <button type="button" onClick={() => togglePetSelection(pet.id, "home")} className="btn-pop bg-card px-3 py-2 text-sm">Home</button>
+                  <button type="button" onClick={() => adoptPet(pet.id)} className="btn-pop bg-success px-3 py-2 text-sm text-success-foreground">Adopt</button>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
 

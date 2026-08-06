@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { PUPPIES, type Grade } from "@/lib/pawpath/data";
+import { PUPPIES, STARTER_DOGS, type Grade } from "@/lib/pawpath/data";
 import { usePawPath } from "@/lib/pawpath/store";
 import { PuppyImage } from "@/components/pawpath/PuppyImage";
 
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/")({
   component: StartPage,
 });
 
-const GRADES: Grade[] = [3, 4, 5];
+const GRADES: Grade[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 function StartPage() {
   const { state, startProfile } = usePawPath();
@@ -33,6 +33,7 @@ function StartPage() {
   const [grade, setGrade] = useState<Grade>(state.profile?.grade ?? 3);
   const [puppyName, setPuppyName] = useState(state.profile?.puppyName ?? "");
   const [puppyId, setPuppyId] = useState(state.profile?.puppyId ?? "sunny");
+  const [starterPetId, setStarterPetId] = useState(state.profile?.starterPetId ?? "corgi");
   const [error, setError] = useState("");
 
   function go(where: "/home" | "/parent") {
@@ -41,7 +42,7 @@ function StartPage() {
       return;
     }
     setError("");
-    startProfile({ name: name.trim(), grade, puppyName: puppyName.trim(), puppyId });
+    startProfile({ name: name.trim(), grade, puppyName: puppyName.trim(), puppyId, starterPetId });
     navigate({ to: where });
   }
 
@@ -76,7 +77,7 @@ function StartPage() {
 
           <div>
             <p className="font-display text-lg font-extrabold">Your grade</p>
-            <div className="mt-2 grid grid-cols-3 gap-3">
+            <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-5">
               {GRADES.map((g) => (
                 <button
                   key={g}
@@ -105,6 +106,28 @@ function StartPage() {
               placeholder="Give your puppy a name"
               className="mt-2 w-full rounded-xl border-2 border-input bg-background px-4 py-3 text-lg outline-none focus:border-primary"
             />
+          </div>
+
+          <div>
+            <p className="font-display text-lg font-extrabold">Choose a starter rescue dog</p>
+            <div className="mt-2 grid gap-3 sm:grid-cols-3">
+              {STARTER_DOGS.map((pet) => (
+                <button
+                  key={pet.id}
+                  type="button"
+                  onClick={() => setStarterPetId(pet.id)}
+                  className={`btn-pop flex flex-col items-start gap-1 p-3 text-left ${
+                    starterPetId === pet.id
+                      ? "bg-accent text-accent-foreground"
+                      : "bg-secondary text-secondary-foreground"
+                  }`}
+                >
+                  <span className="text-2xl">🐶</span>
+                  <span className="font-display text-sm font-extrabold">{pet.name}</span>
+                  <span className="text-sm">{pet.breed}</span>
+                </button>
+              ))}
+            </div>
           </div>
 
           <div>

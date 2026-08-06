@@ -9,10 +9,13 @@ import {
 } from "react";
 import {
   LEVELS,
+  RESCUE_CATS,
   SHOP_ITEMS,
   SKILLS,
+  STARTER_DOGS,
   type Grade,
   type Question,
+  type RescuePet,
   type Subject,
 } from "./data";
 
@@ -21,6 +24,7 @@ export interface Profile {
   grade: Grade;
   puppyName: string;
   puppyId: string;
+  starterPetId?: string | null;
 }
 
 export interface Stat {
@@ -51,6 +55,15 @@ export interface GameState {
   wrongLog: WrongEntry[];
   owned: string[];
   adventureProgress: Record<string, number>;
+  ownedBackgroundIds: string[];
+  backgroundId: string;
+  homeSlots: Array<string | null>;
+  checkInDay: number;
+  lastCheckInDate: string | null;
+  rescuePets: RescuePet[];
+  followingPetIds: string[];
+  homePetIds: string[];
+  adoptedPetIds: string[];
 }
 
 const STORAGE_KEY = "pawpath-state-v1";
@@ -136,6 +149,15 @@ function initialState(): GameState {
     ],
     owned: ["food-bowl", "toy-ball"],
     adventureProgress: {},
+    ownedBackgroundIds: ["yard"],
+    backgroundId: "yard",
+    homeSlots: Array(9).fill(null),
+    checkInDay: 0,
+    lastCheckInDate: null,
+    rescuePets: [...STARTER_DOGS, ...RESCUE_CATS].map((pet) => ({ ...pet })),
+    followingPetIds: ["corgi"],
+    homePetIds: ["orange-cat"],
+    adoptedPetIds: [],
   };
 }
 
@@ -153,6 +175,15 @@ interface Store {
   buy: (itemId: string) => boolean;
   setAdventureStep: (adventureId: string, step: number) => void;
   addMinutes: (m: number) => void;
+  setGrade: (grade: Grade) => void;
+  unlockBackground: (backgroundId: string, cost: number) => boolean;
+  setBackground: (backgroundId: string) => void;
+  setHomeSlot: (slotIndex: number, itemId: string | null) => void;
+  clearHomeSlot: (slotIndex: number) => void;
+  claimCheckIn: () => { coins: number; rewardId: string | null } | null;
+  interactWithPet: (petId: string, action: "pet" | "feed" | "play" | "brush" | "wash" | "gift") => void;
+  togglePetSelection: (petId: string, list: "following" | "home") => void;
+  adoptPet: (petId: string) => void;
   reset: () => void;
 }
 
@@ -182,7 +213,16 @@ export function PawPathProvider({ children }: { children: ReactNode }) {
   }, [state, ready]);
 
   const startProfile = useCallback((profile: Profile) => {
-    setState((s) => ({ ...s, profile }));
+    setState((s) => ({
+      ...s,
+      profile,
+      followingPetIds: profile.starterPetId && !s.followingPetIds.includes(profile.starterPetId)
+        ? [profile.starterPetId, ...s.followingPetIds]
+        : s.followingPetIds,
+      homePetIds: profile.starterPetId && !s.homePetIds.includes(profile.starterPetId)
+        ? [profile.starterPetId, ...s.homePetIds]
+        : s.homePetIds,
+    }));
   }, []);
 
   const answer = useCallback(
@@ -276,11 +316,139 @@ export function PawPathProvider({ children }: { children: ReactNode }) {
     setState((s) => ({ ...s, minutesLearning: s.minutesLearning + m }));
   }, []);
 
+  const setGrade = useCallback((grade: Grade) => {
+    setState((s) => ({
+      ...s,
+      profile: s.profile ? { ...s.profile, grade } : s.profile,
+    }));
+  }, []);
+
+  const unlockBackground = useCallback((backgroundId: string, cost: number) => {
+    let done = false;
+    setState((s) => {
+      if (s.ownedBackgroundIds.includes(backgroundId) || s.coins < cost) return s;
+      done = true;
+      return {
+        ...s,
+        coins: s.coins - cost,
+        ownedBackgroundIds: [...s.ownedBackgroundIds, backgroundId],
+        backgroundId,
+      };
+    });
+    return done;
+  }, []);
+
+  const setBackground = useCallback((backgroundId: string) => {
+    setState((s) => ({ ...s, backgroundId }));
+  }, []);
+
+  const setHomeSlot = useCallback((slotIndex: number, itemId: string | null) => {
+    setState((s) => {
+      const next = [...s.homeSlots];
+      next[slotIndex] = itemId;
+      return { ...s, homeSlots: next };
+    });
+  }, []);
+
+  const clearHomeSlot = useCallback((slotIndex: number) => {
+    setState((s) => {
+      const next = [...s.homeSlots];
+      next[slotIndex] = null;
+      return { ...s, homeSlots: next };
+    });
+  }, []);
+
+  const claimCheckIn = useCallback(() => {
+    let result: { coins: number; rewardId: string | null } | null = null;
+    setState((s) => {
+      const today = new Date().toISOString().slice(0, 10);
+      if (s.lastCheckInDate === today) return s;
+      const dayIndex = s.checkInDay % 7;
+      const coins = [20, 25, 30, 35, 40, 45, 50][dayIndex];
+      const rewardId = dayIndex === 6 ? "checkin-golden-bowl" : null;
+      result = { coins, rewardId };
+      const nextOwned = rewardId && !s.owned.includes(rewardId) ? [...s.owned, rewardId] : s.owned;
+      return {
+        ...s,
+        coins: s.coins + coins,
+        checkInDay: s.checkInDay + 1,
+        lastCheckInDate: today,
+        owned: nextOwned,
+      };
+    });
+    return result;
+  }, []);
+
+  const interactWithPet = useCallback(
+    (petId: string, action: "pet" | "feed" | "play" | "brush" | "wash" | "gift") => {
+      setState((s) => {
+        const pet = s.rescuePets.find((entry) => entry.id === petId);
+        if (!pet) return s;
+        const rewardCoins = action === "pet" ? 10 : action === "feed" ? 15 : action === "play" ? 12 : action === "brush" ? 8 : action === "wash" ? 8 : 12;
+        const moodRank = ["Sad", "Nervous", "Calm", "Happy", "Very Happy"].indexOf(pet.mood);
+        const nextMoodRank = Math.min(4, moodRank + (action === "gift" ? 2 : 1));
+        const nextMood = ["Sad", "Nervous", "Calm", "Happy", "Very Happy"][nextMoodRank] as RescuePet["mood"];
+        const nextPets = s.rescuePets.map((entry) =>
+          entry.id === petId ? { ...entry, mood: nextMood } : entry,
+        );
+        const shouldAdopt = nextMood === "Very Happy" && !s.adoptedPetIds.includes(petId);
+        const nextAdopted = shouldAdopt ? [...s.adoptedPetIds, petId] : s.adoptedPetIds;
+        return {
+          ...s,
+          coins: s.coins + rewardCoins,
+          rescuePets: nextPets,
+          adoptedPetIds: nextAdopted,
+        };
+      });
+    },
+    [],
+  );
+
+  const togglePetSelection = useCallback((petId: string, list: "following" | "home") => {
+    setState((s) => {
+      const key = list === "following" ? "followingPetIds" : "homePetIds";
+      const listValue = list === "following" ? s.followingPetIds : s.homePetIds;
+      const next = listValue.includes(petId)
+        ? listValue.filter((entry) => entry !== petId)
+        : [...listValue, petId];
+      return { ...s, [key]: next };
+    });
+  }, []);
+
+  const adoptPet = useCallback((petId: string) => {
+    setState((s) => {
+      if (s.adoptedPetIds.includes(petId)) return s;
+      return {
+        ...s,
+        adoptedPetIds: [...s.adoptedPetIds, petId],
+        homePetIds: s.homePetIds.includes(petId) ? s.homePetIds : [...s.homePetIds, petId],
+      };
+    });
+  }, []);
+
   const reset = useCallback(() => setState(initialState()), []);
 
   const value = useMemo<Store>(
-    () => ({ state, ready, startProfile, answer, buy, setAdventureStep, addMinutes, reset }),
-    [state, ready, startProfile, answer, buy, setAdventureStep, addMinutes, reset],
+    () => ({
+      state,
+      ready,
+      startProfile,
+      answer,
+      buy,
+      setAdventureStep,
+      addMinutes,
+      setGrade,
+      unlockBackground,
+      setBackground,
+      setHomeSlot,
+      clearHomeSlot,
+      claimCheckIn,
+      interactWithPet,
+      togglePetSelection,
+      adoptPet,
+      reset,
+    }),
+    [state, ready, startProfile, answer, buy, setAdventureStep, addMinutes, setGrade, unlockBackground, setBackground, setHomeSlot, clearHomeSlot, claimCheckIn, interactWithPet, togglePetSelection, adoptPet, reset],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
