@@ -1773,39 +1773,7 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
 export const SHOP_ITEMS: ShopItem[] = TOOL_CATEGORIES.flatMap((category) =>
   category.variants.map((item) => ({ ...item, group: category.name }))
 );
-  { id: "food-bowl", name: "Yummy Kibble", emoji: "🍖", cost: 20, group: "Puppy Food" },
-  { id: "food-bone", name: "Big Bone Treat", emoji: "🦴", cost: 35, group: "Puppy Food" },
-  { id: "food-cake", name: "Puppy Birthday Cake", emoji: "🎂", cost: 60, group: "Puppy Food" },
-  { id: "toy-ball", name: "Bouncy Ball", emoji: "⚽", cost: 25, group: "Toys" },
-  { id: "toy-frisbee", name: "Flying Disc", emoji: "🥏", cost: 40, group: "Toys" },
-  { id: "toy-duck", name: "Squeaky Duck", emoji: "🦆", cost: 30, group: "Toys" },
-  { id: "cloth-hat", name: "Sun Hat", emoji: "👒", cost: 45, group: "Clothes" },
-  { id: "cloth-scarf", name: "Cozy Scarf", emoji: "🧣", cost: 50, group: "Clothes" },
-  { id: "cloth-cape", name: "Hero Cape", emoji: "🦸", cost: 80, group: "Clothes" },
-  { id: "room-bed", name: "Soft Bed", emoji: "🛏️", cost: 55, group: "Puppy Room" },
-  { id: "room-lamp", name: "Star Lamp", emoji: "🪄", cost: 45, group: "Puppy Room" },
-  { id: "room-plant", name: "Happy Plant", emoji: "🪴", cost: 35, group: "Puppy Room" },
-  { id: "place-beach", name: "Sunny Beach", emoji: "🏖️", cost: 90, group: "New Places" },
-  { id: "place-forest", name: "Green Forest", emoji: "🌲", cost: 90, group: "New Places" },
-  { id: "place-moon", name: "Moon Camp", emoji: "🌙", cost: 120, group: "New Places" },
-  { id: "skill-sit", name: "Sit and Stay", emoji: "🐾", cost: 40, group: "Puppy Skills" },
-  { id: "skill-jump", name: "Super Jump", emoji: "✨", cost: 70, group: "Puppy Skills" },
-  { id: "skill-read", name: "Read Along", emoji: "📖", cost: 100, group: "Puppy Skills" },
-  { id: "hotel-dog-mat", name: "Dog mat", emoji: "🧸", cost: 28, group: "Rescue Hotel", category: "comfort", forType: "dog" },
-  { id: "hotel-cat-bed", name: "Cat bed", emoji: "🛏️", cost: 32, group: "Rescue Hotel", category: "comfort", forType: "cat" },
-  { id: "hotel-blanket", name: "Warm blanket", emoji: "🧵", cost: 26, group: "Rescue Hotel", category: "comfort", forType: "both" },
-  { id: "hotel-pillow", name: "Soft pillow", emoji: "🛋️", cost: 24, group: "Rescue Hotel", category: "comfort", forType: "both" },
-  { id: "hotel-rug", name: "Cute rug", emoji: "🧶", cost: 30, group: "Rescue Hotel", category: "decor", forType: "both" },
-  { id: "hotel-lamp", name: "Cute lamp", emoji: "💡", cost: 34, group: "Rescue Hotel", category: "decor", forType: "both" },
-  { id: "hotel-ball", name: "Small ball", emoji: "⚽", cost: 22, group: "Rescue Hotel", category: "play", forType: "both" },
-  { id: "hotel-rope", name: "Rope toy", emoji: "🪢", cost: 26, group: "Rescue Hotel", category: "play", forType: "dog" },
-  { id: "hotel-mouse", name: "Plush mouse", emoji: "🐭", cost: 24, group: "Rescue Hotel", category: "play", forType: "cat" },
-  { id: "checkin-golden-bowl", name: "Golden bowl", emoji: "🥣", cost: 0, group: "Check-In", category: "check-in", limitedForDays: 7 },
-  { id: "checkin-rainbow-bed", name: "Rainbow bed", emoji: "🌈", cost: 0, group: "Check-In", category: "check-in", limitedForDays: 7 },
-  { id: "event-dragon", name: "Dragon Boat bed", emoji: "🛏️", cost: 60, group: "Limited Events", category: "event", limitedForDays: 7, eventName: "Dragon Boat Festival" },
-  { id: "event-christmas", name: "Christmas tree", emoji: "🎄", cost: 70, group: "Limited Events", category: "event", limitedForDays: 14, eventName: "Christmas" },
-  { id: "event-newyear", name: "New Year lantern", emoji: "🏮", cost: 64, group: "Limited Events", category: "event", limitedForDays: 30, eventName: "New Year" },
-];
+
 
 export const BACKGROUND_OPTIONS: HotelBackground[] = [
   { id: "yard", name: "Simple Rescue Yard", description: "A bright start for every new rescue hotel.", cost: 0, emoji: "🌿", category: "free" },
