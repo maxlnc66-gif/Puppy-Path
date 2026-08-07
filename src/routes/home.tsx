@@ -250,33 +250,6 @@ function HomePage() {
           </div>
         </section>
 
-        <section className="mt-6 card-soft p-4 sm:p-6">
-          <h2 className="text-2xl">Rescue pets</h2>
-          <div className="mt-3 grid gap-3 md:grid-cols-2">
-            {state.rescuePets.map((pet) => (
-              <article key={pet.id} className="rounded-2xl border border-border bg-card/70 p-4">
-                <div className="flex items-center justify-between gap-2">
-                  <div>
-                    <p className="text-lg font-extrabold">{pet.name}</p>
-                    <p className="text-sm text-muted-foreground">{pet.breed} · {pet.type}</p>
-                  </div>
-                  <span className="rounded-full bg-mint px-3 py-1 text-sm font-extrabold text-mint-foreground">{pet.mood}</span>
-                </div>
-                <p className="mt-2 text-sm">{pet.story}</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <button type="button" onClick={() => interactWithPet(pet.id, "pet")} className="btn-pop bg-primary px-3 py-2 text-sm text-primary-foreground">Pet</button>
-                  <button type="button" onClick={() => interactWithPet(pet.id, "feed")} className="btn-pop bg-secondary px-3 py-2 text-sm text-secondary-foreground">Feed</button>
-                  <button type="button" onClick={() => interactWithPet(pet.id, "play")} className="btn-pop bg-berry px-3 py-2 text-sm text-berry-foreground">Play</button>
-                  <button type="button" onClick={() => interactWithPet(pet.id, "gift")} className="btn-pop bg-mint px-3 py-2 text-sm text-mint-foreground">Gift</button>
-                  <button type="button" onClick={() => togglePetSelection(pet.id, "following")} className="btn-pop bg-card px-3 py-2 text-sm">Follow</button>
-                  <button type="button" onClick={() => togglePetSelection(pet.id, "home")} className="btn-pop bg-card px-3 py-2 text-sm">Home</button>
-                  <button type="button" onClick={() => adoptPet(pet.id)} className="btn-pop bg-success px-3 py-2 text-sm text-success-foreground">Adopt</button>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
         <Link
           to="/mission/$adventureId"
           params={{ adventureId: todayAdventure.id }}
