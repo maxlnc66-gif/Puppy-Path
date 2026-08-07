@@ -150,23 +150,24 @@ function ShopPage() {
             </div>
             <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
               {category.variants.map((item) => {
-                const has = state.owned.includes(item.id);
+                const shopItem = SHOP_ITEMS.find((i) => i.id === item.id) ?? item;
+                const has = state.owned.includes(shopItem.id);
                 return (
-                  <div key={item.id} className="card-soft flex items-center gap-3 p-3">
+                  <div key={shopItem.id} className="card-soft flex items-center gap-3 p-3">
                     <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-secondary">
-                      <span className={`tool-icon icon-${item.id}`} aria-hidden>
-                        {item.emoji}
+                      <span className={`tool-icon icon-${shopItem.id}`} aria-hidden>
+                        {shopItem.emoji}
                       </span>
-                      <span className="sr-only">{item.emoji}</span>
+                      <span className="sr-only">{shopItem.emoji}</span>
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate font-display text-lg font-extrabold">{item.name}</p>
-                      <p className="text-sm text-muted-foreground">🪙 {item.cost} coins</p>
+                      <p className="truncate font-display text-lg font-extrabold">{shopItem.name}</p>
+                      <p className="text-sm text-muted-foreground">🪙 {shopItem.cost} coins</p>
                     </div>
                     <button
                       type="button"
                       disabled={has}
-                      onClick={() => handleBuy(item)}
+                      onClick={() => handleBuy(shopItem)}
                       className={`btn-pop shrink-0 px-4 py-2.5 text-base ${
                         has
                           ? "bg-success text-success-foreground"
