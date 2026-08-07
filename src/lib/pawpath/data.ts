@@ -1774,23 +1774,15 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
   },
 ];
 
-// Normalize shop item prices into a higher range (300 - 2000) while keeping relative ordering
+// Scale tool prices into a higher range so shop items feel more expensive.
 const _rawShop = TOOL_CATEGORIES.flatMap((category) =>
   category.variants.map((item) => ({ ...item, group: category.name }))
 );
-const rawCosts = _rawShop.map((i) => i.cost);
-const rawMin = Math.min(...rawCosts);
-const rawMax = Math.max(...rawCosts);
-const PRICE_MIN = 300;
-const PRICE_MAX = 2000;
-export const SHOP_ITEMS: ShopItem[] = _rawShop.map((item) => {
-  let cost = PRICE_MIN;
-  if (rawMax > rawMin) {
-    const t = (item.cost - rawMin) / (rawMax - rawMin);
-    cost = Math.round(PRICE_MIN + t * (PRICE_MAX - PRICE_MIN));
-  }
-  return { ...item, cost };
-});
+const PRICE_SCALE = 70;
+export const SHOP_ITEMS: ShopItem[] = _rawShop.map((item) => ({
+  ...item,
+  cost: Math.round(item.cost * PRICE_SCALE),
+}));
 
 
 export const BACKGROUND_OPTIONS: HotelBackground[] = [

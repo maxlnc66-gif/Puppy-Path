@@ -43,6 +43,9 @@ function ShopPage() {
   }
 
   const owned = SHOP_ITEMS.filter((i) => state.owned.includes(i.id));
+  const affordableItems = SHOP_ITEMS.filter(
+    (item) => !state.owned.includes(item.id) && item.cost <= state.coins,
+  );
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -56,7 +59,6 @@ function ShopPage() {
               priority
               className="h-full w-full"
             />
-          </div>
           <div className="min-w-0">
             <h2 className="text-2xl">
               {profile.puppyName} · {info.current.name}
@@ -88,6 +90,49 @@ function ShopPage() {
             {message}
           </p>
         ) : null}
+
+        <section className="mt-6 card-soft p-4 sm:p-6">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <h2 className="text-2xl">What you can buy now</h2>
+              <p className="text-sm text-muted-foreground">
+                These items are affordable with your current coin balance.
+              </p>
+            </div>
+            <span className="rounded-full bg-secondary px-3 py-1 text-sm font-extrabold text-secondary-foreground">
+              {affordableItems.length} available
+            </span>
+          </div>
+          <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            {affordableItems.length === 0 ? (
+              <div className="rounded-3xl border border-border bg-card p-4 text-sm text-muted-foreground">
+                No affordable items right now. Keep learning to earn more coins.
+              </div>
+            ) : (
+              affordableItems.map((item) => (
+                <div key={item.id} className="card-soft flex items-center gap-3 p-3">
+                  <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-secondary">
+                    <span className={`tool-icon icon-${item.id}`} aria-hidden>
+                      {item.emoji}
+                    </span>
+                    <span className="sr-only">{item.emoji}</span>
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-display text-lg font-extrabold">{item.name}</p>
+                    <p className="text-sm text-muted-foreground">🪙 {item.cost} coins</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleBuy(item)}
+                    className="btn-pop shrink-0 bg-primary px-4 py-2.5 text-base text-primary-foreground"
+                  >
+                    Buy now
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        </section>
 
         {TOOL_CATEGORIES.map((category) => (
           <section key={category.id} className="mt-6">
