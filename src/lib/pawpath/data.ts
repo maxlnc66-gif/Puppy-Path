@@ -1455,15 +1455,15 @@ function makeRescuePets(type: "dog" | "cat", count: number): RescuePet[] {
       id,
       name: `${names[nameIndex]} ${suffix}`,
       type,
-      breed: breeds[breedIndex],
+      breed: breeds[breedIndex]!,
       age: 1 + ((index % 5) + 1),
       story: `${names[nameIndex]} was rescued and is ready to find a loving home.`,
       personality: `${type === "dog" ? "Playful" : "Curious"} and kind`,
-      favoriteFood: favoriteFoods[index % favoriteFoods.length],
-      favoriteToy: favoriteToys[index % favoriteToys.length],
-      favoriteItem: favoriteItems[index % favoriteItems.length],
-      mood: MOODS[moodIndex],
-      location: LOCATIONS[locationIndex],
+      favoriteFood: favoriteFoods[index % favoriteFoods.length]!,
+      favoriteToy: favoriteToys[index % favoriteToys.length]!,
+      favoriteItem: favoriteItems[index % favoriteItems.length]!,
+      mood: MOODS[moodIndex]!,
+      location: LOCATIONS[locationIndex]!,
       adopted: false,
     };
   });
@@ -1774,9 +1774,23 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
   },
 ];
 
-export const SHOP_ITEMS: ShopItem[] = TOOL_CATEGORIES.flatMap((category) =>
+// Normalize shop item prices into a higher range (300 - 2000) while keeping relative ordering
+const _rawShop = TOOL_CATEGORIES.flatMap((category) =>
   category.variants.map((item) => ({ ...item, group: category.name }))
 );
+const rawCosts = _rawShop.map((i) => i.cost);
+const rawMin = Math.min(...rawCosts);
+const rawMax = Math.max(...rawCosts);
+const PRICE_MIN = 300;
+const PRICE_MAX = 2000;
+export const SHOP_ITEMS: ShopItem[] = _rawShop.map((item) => {
+  let cost = PRICE_MIN;
+  if (rawMax > rawMin) {
+    const t = (item.cost - rawMin) / (rawMax - rawMin);
+    cost = Math.round(PRICE_MIN + t * (PRICE_MAX - PRICE_MIN));
+  }
+  return { ...item, cost };
+});
 
 
 export const BACKGROUND_OPTIONS: HotelBackground[] = [
