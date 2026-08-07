@@ -59,6 +59,7 @@ function ShopPage() {
               priority
               className="h-full w-full"
             />
+          </div>
           <div className="min-w-0">
             <h2 className="text-2xl">
               {profile.puppyName} · {info.current.name}
