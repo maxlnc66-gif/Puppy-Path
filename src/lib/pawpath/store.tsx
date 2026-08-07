@@ -189,6 +189,7 @@ interface Store {
   togglePetSelection: (petId: string, list: "following" | "home") => void;
   adoptPet: (petId: string, free?: boolean) => boolean;
   claimFreeAdoption: (petId: string) => boolean;
+  logout: () => void;
   reset: () => void;
 }
 
@@ -464,6 +465,10 @@ export function PawPathProvider({ children }: { children: ReactNode }) {
     return ok;
   }, []);
 
+  const logout = useCallback(() => {
+    setState(initialState());
+  }, []);
+
   const reset = useCallback(() => setState(initialState()), []);
 
   const value = useMemo<Store>(
@@ -485,9 +490,10 @@ export function PawPathProvider({ children }: { children: ReactNode }) {
       togglePetSelection,
       adoptPet,
       claimFreeAdoption,
+      logout,
       reset,
     }),
-      [state, ready, startProfile, answer, buy, setAdventureStep, addMinutes, setGrade, unlockBackground, setBackground, setHomeSlot, clearHomeSlot, claimCheckIn, interactWithPet, togglePetSelection, adoptPet, claimFreeAdoption, reset],
+      [state, ready, startProfile, answer, buy, setAdventureStep, addMinutes, setGrade, unlockBackground, setBackground, setHomeSlot, clearHomeSlot, claimCheckIn, interactWithPet, togglePetSelection, adoptPet, claimFreeAdoption, logout, reset],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

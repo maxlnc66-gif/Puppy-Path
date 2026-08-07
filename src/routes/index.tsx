@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PUPPIES, RESCUE_CATS, RESCUE_DOGS, STARTER_DOGS, type Grade } from "@/lib/pawpath/data";
 import { usePawPath } from "@/lib/pawpath/store";
 import { PuppyImage } from "@/components/pawpath/PuppyImage";
@@ -27,8 +27,9 @@ export const Route = createFileRoute("/")({
 const GRADES: Grade[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 function StartPage() {
-  const { state, startProfile } = usePawPath();
+  const { state, startProfile, logout } = usePawPath();
   const navigate = useNavigate();
+  const [editing, setEditing] = useState(() => !state.profile);
   const [name, setName] = useState(state.profile?.name ?? "");
   const [grade, setGrade] = useState<Grade>(state.profile?.grade ?? 3);
   const [puppyName, setPuppyName] = useState(state.profile?.puppyName ?? "");
@@ -36,14 +37,111 @@ function StartPage() {
   const [starterPetId, setStarterPetId] = useState(state.profile?.starterPetId ?? "corgi");
   const [error, setError] = useState("");
 
+  const profile = state.profile;
+  const hasProfile = Boolean(profile);
+  const showLogin = hasProfile && !editing;
+  const initialLoad = useRef(true);
+
+  useEffect(() => {
+    if (!initialLoad.current) return;
+    if (hasProfile) {
+      setEditing(false);
+      setName(profile?.name ?? "");
+      setGrade(profile?.grade ?? 3);
+      setPuppyName(profile?.puppyName ?? "");
+      setPuppyId(profile?.puppyId ?? "sunny");
+      setStarterPetId(profile?.starterPetId ?? "corgi");
+    }
+    initialLoad.current = false;
+  }, [hasProfile, profile]);
+
   function go(where: "/home" | "/parent") {
     if (!name.trim() || !puppyName.trim()) {
       setError("Please write your name and your puppy's name. 🐾");
       return;
     }
     setError("");
-    startProfile({ name: name.trim(), grade, puppyName: puppyName.trim(), puppyId, starterPetId });
+    if (editing) {
+      startProfile({ name: name.trim(), grade, puppyName: puppyName.trim(), puppyId, starterPetId });
+    }
     navigate({ to: where });
+  }
+
+  function handleEdit() {
+    setEditing(true);
+  }
+
+  function handleLogout() {
+    logout();
+    setEditing(true);
+    setName("");
+    setGrade(3);
+    setPuppyName("");
+    setPuppyId("sunny");
+    setStarterPetId("corgi");
+    setError("");
+  }
+
+  if (showLogin && profile) {
+    return (
+      <main className="sky-panel min-h-screen px-4 py-8">
+        <div className="mx-auto max-w-2xl">
+          <div className="text-center">
+            <p className="font-display text-lg font-extrabold text-primary">🐾 Welcome back</p>
+            <h1 className="text-4xl sm:text-5xl">{profile.name}</h1>
+            <p className="mx-auto mt-2 max-w-md text-lg text-muted-foreground">
+              Continue with your saved puppy and profile, or edit your details.
+            </p>
+          </div>
+
+          <div className="mx-auto mt-4 h-40 w-40 sm:h-48 sm:w-48">
+            <PuppyImage puppyId={profile.puppyId} alt={`${profile.puppyName} the puppy`} priority className="h-full w-full" />
+          </div>
+
+          <div className="card-soft mt-4 space-y-4 p-4 sm:p-6">
+            <div className="rounded-3xl border border-border bg-secondary/80 p-4 text-left">
+              <p className="text-sm text-muted-foreground">Puppy</p>
+              <p className="mt-1 text-2xl font-display font-extrabold">{profile.puppyName}</p>
+              <p className="text-sm text-muted-foreground">Grade {profile.grade}</p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={() => go("/home")}
+                className="btn-pop bg-primary px-6 py-4 text-xl text-primary-foreground"
+              >
+                🎒 Continue Student View
+              </button>
+              <button
+                type="button"
+                onClick={() => go("/parent")}
+                className="btn-pop bg-mint px-6 py-4 text-xl text-mint-foreground"
+              >
+                👨‍👩‍👧 Continue Parent View
+              </button>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              <button
+                type="button"
+                onClick={handleEdit}
+                className="btn-pop bg-secondary px-6 py-4 text-xl text-secondary-foreground"
+              >
+                ✏️ Edit profile
+              </button>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="btn-pop bg-destructive px-6 py-4 text-xl text-destructive-foreground"
+              >
+                🚪 Log out
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
   }
 
   return (
